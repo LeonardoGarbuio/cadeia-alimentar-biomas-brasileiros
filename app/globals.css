@@ -1,0 +1,1999 @@
+@import "tailwindcss";
+
+:root {
+  --ink: #17352a;
+  --ink-soft: #53675e;
+  --forest: #123f30;
+  --forest-dark: #092b22;
+  --paper: #f5f0df;
+  --paper-light: #fffdf4;
+  --sun: #f5c84c;
+  --line: rgba(20, 60, 45, 0.17);
+  --shadow: 0 24px 70px rgba(6, 32, 23, 0.18);
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; background: var(--forest-dark); }
+body {
+  margin: 0;
+  color: var(--ink);
+  background: var(--paper);
+  font-family: "Trebuchet MS", "Segoe UI", Arial, sans-serif;
+  text-rendering: optimizeLegibility;
+}
+button, a { -webkit-tap-highlight-color: transparent; }
+button { font: inherit; }
+button:focus-visible, a:focus-visible { outline: 4px solid #ffe26d; outline-offset: 4px; }
+
+.journey-shell {
+  min-height: 100vh;
+  overflow: hidden;
+  background: radial-gradient(circle at 8% 45%, rgba(232, 207, 124, 0.26), transparent 20rem), var(--paper);
+}
+
+.topbar {
+  position: absolute;
+  z-index: 20;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(100% - 48px, 1320px);
+  height: 92px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  color: white;
+}
+
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  color: inherit;
+  font-size: 14px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
+.brand__mark {
+  position: relative;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: var(--sun);
+  box-shadow: 0 7px 22px rgba(0, 0, 0, 0.16);
+}
+.brand__mark i {
+  position: absolute;
+  left: 20px;
+  bottom: 8px;
+  width: 3px;
+  height: 24px;
+  border-radius: 4px;
+  background: #154735;
+  transform-origin: bottom;
+}
+.brand__mark i:nth-child(1) { transform: rotate(-38deg) scaleY(0.75); }
+.brand__mark i:nth-child(2) { transform: rotate(0deg); }
+.brand__mark i:nth-child(3) { transform: rotate(38deg) scaleY(0.78); }
+
+.sound-button, .back-button, .hint-pill { border: 0; cursor: pointer; }
+.sound-button {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 10px 15px;
+  border: 1px solid rgba(255, 255, 255, 0.27);
+  border-radius: 999px;
+  color: white;
+  background: rgba(2, 23, 17, 0.24);
+  backdrop-filter: blur(10px);
+  font-size: 12px;
+  font-weight: 700;
+}
+.sound-button span { font-size: 17px; letter-spacing: -4px; }
+.sound-button:disabled { cursor: default; opacity: 0.76; }
+
+.hero-map {
+  position: relative;
+  min-height: 690px;
+  display: flex;
+  align-items: center;
+  isolation: isolate;
+  overflow: hidden;
+  color: white;
+  background: linear-gradient(90deg, rgba(6, 40, 29, 0.98) 0%, rgba(10, 57, 41, 0.9) 42%, rgba(14, 73, 47, 0.56) 72%, rgba(17, 91, 54, 0.4) 100%), url("/biomes/biome-amazonia.png") center / cover;
+}
+.hero-map::after {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset: auto 0 0;
+  height: 120px;
+  background: linear-gradient(transparent, rgba(4, 35, 26, 0.35));
+}
+.ambient-canvas { position: absolute; z-index: 2; inset: 0; pointer-events: none; overflow: hidden; }
+.ambient-canvas canvas { display: block; width: 100%; height: 100%; }
+.hero-map__copy { position: relative; z-index: 5; width: min(100% - 48px, 1320px); margin: 52px auto 0; }
+.kicker {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  margin-bottom: 20px;
+  color: rgba(255, 255, 255, 0.78);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+.kicker span { color: var(--sun); }
+.hero-map h1, .habitat__copy h1, .result-card h1, .section-heading h2, .puzzle__heading h2 {
+  font-family: Georgia, "Times New Roman", serif;
+  font-weight: 500;
+  letter-spacing: -0.045em;
+}
+.hero-map h1 {
+  max-width: 800px;
+  margin: 0;
+  font-size: clamp(56px, 7vw, 102px);
+  line-height: 0.91;
+  text-wrap: balance;
+  text-shadow: 0 7px 40px rgba(0, 0, 0, 0.24);
+}
+.hero-map h1 em { color: var(--sun); font-weight: 500; }
+.hero-map__copy > p { max-width: 620px; margin: 28px 0 0; color: rgba(255, 255, 255, 0.82); font-size: 18px; line-height: 1.65; }
+.progress-summary {
+  width: min(460px, 100%);
+  margin-top: 36px;
+  display: grid;
+  grid-template-columns: auto auto 1fr;
+  align-items: center;
+  gap: 15px;
+}
+.progress-summary__number { color: var(--sun); font-family: Georgia, serif; font-size: 38px; line-height: 1; }
+.progress-summary__number small { color: rgba(255, 255, 255, 0.5); font-size: 17px; }
+.progress-summary > span:nth-child(2) { color: rgba(255, 255, 255, 0.66); font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; }
+.progress-line { height: 3px; overflow: hidden; background: rgba(255, 255, 255, 0.18); }
+.progress-line i { display: block; height: 100%; min-width: 8px; background: var(--sun); transition: width 500ms ease; }
+.hero-map__leaf {
+  position: absolute;
+  z-index: 3;
+  width: 145px;
+  height: 70px;
+  border-radius: 100% 0 100% 0;
+  border: 1px solid rgba(183, 225, 157, 0.25);
+  background: rgba(80, 153, 90, 0.13);
+  backdrop-filter: blur(2px);
+  transform: rotate(30deg);
+  animation: leaf-sway 8s ease-in-out infinite;
+}
+.hero-map__leaf--one { right: 7%; top: 18%; }
+.hero-map__leaf--two { right: 25%; bottom: 8%; transform: rotate(-28deg) scale(0.7); animation-delay: -4s; }
+@keyframes leaf-sway { 0%, 100% { translate: 0 0; rotate: -2deg; } 50% { translate: 0 -18px; rotate: 5deg; } }
+
+.expedition { position: relative; z-index: 4; width: min(100% - 48px, 1320px); margin: 0 auto; padding: 92px 0 108px; }
+.section-heading { display: flex; align-items: flex-end; justify-content: space-between; gap: 40px; margin-bottom: 42px; }
+.section-heading > div { position: relative; padding-left: 58px; }
+.section-number { position: absolute; left: 0; top: 3px; color: #a28d43; font-family: Georgia, serif; font-size: 17px; }
+.section-heading p { margin: 0 0 9px; color: #8c7a43; font-size: 11px; font-weight: 800; letter-spacing: 0.16em; text-transform: uppercase; }
+.section-heading h2 { margin: 0; color: var(--forest); font-size: clamp(38px, 4.4vw, 64px); }
+.section-heading .section-intro { max-width: 390px; margin: 0 0 5px; color: var(--ink-soft); font-size: 14px; font-weight: 500; letter-spacing: 0; line-height: 1.7; text-transform: none; }
+
+.biome-grid { display: grid; grid-template-columns: repeat(12, 1fr); gap: 20px; }
+.biome-card {
+  --accent: var(--sun);
+  --deep: var(--forest);
+  position: relative;
+  grid-column: span 4;
+  min-height: 425px;
+  padding: 0;
+  overflow: hidden;
+  border: 0;
+  border-radius: 5px;
+  color: white;
+  background: var(--deep);
+  box-shadow: 0 10px 28px rgba(18, 54, 41, 0.12);
+  cursor: pointer;
+  isolation: isolate;
+  text-align: left;
+  transition: transform 360ms cubic-bezier(.2,.8,.2,1), box-shadow 360ms ease;
+}
+.biome-card:nth-child(1), .biome-card:nth-child(4) { grid-column: span 5; }
+.biome-card:nth-child(2), .biome-card:nth-child(5) { grid-column: span 7; }
+.biome-card:nth-child(3) { grid-column: span 12; min-height: 350px; }
+.biome-card:hover:not(:disabled) { z-index: 2; transform: translateY(-8px); box-shadow: 0 28px 60px rgba(18, 54, 41, 0.22); }
+.biome-card > img { position: absolute; z-index: -3; inset: 0; width: 100%; height: 100%; object-fit: cover; transform: scale(1.03); transition: transform 900ms cubic-bezier(.2,.7,.2,1), filter 500ms ease; }
+.biome-card:hover:not(:disabled) > img { transform: scale(1.09); }
+.biome-card__shade { position: absolute; z-index: -2; inset: 0; background: linear-gradient(180deg, rgba(3, 17, 12, 0.18), transparent 36%, rgba(3, 21, 15, 0.89)); }
+.biome-card__topline { position: absolute; top: 22px; left: 22px; right: 22px; display: flex; align-items: center; justify-content: space-between; color: rgba(255, 255, 255, 0.86); font-size: 10px; font-weight: 800; letter-spacing: 0.15em; text-transform: uppercase; }
+.stars { display: inline-flex; gap: 6px; color: rgba(30, 54, 43, 0.22); font-size: 31px; letter-spacing: 0; }
+.stars--compact { gap: 3px; color: rgba(255, 255, 255, 0.33); font-size: 17px; }
+.star--won { color: var(--accent, var(--sun)); filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.18)); }
+.lock { position: relative; width: 27px; height: 23px; border-radius: 4px; color: transparent; background: rgba(255, 255, 255, 0.75); }
+.lock::before { content: ""; position: absolute; left: 7px; top: -9px; width: 13px; height: 14px; border: 3px solid rgba(255, 255, 255, 0.75); border-bottom: 0; border-radius: 12px 12px 0 0; }
+.biome-card__copy { position: absolute; left: 28px; right: 28px; bottom: 61px; display: flex; flex-direction: column; align-items: flex-start; }
+.biome-card__copy small { margin-bottom: 5px; color: var(--accent); font-size: 11px; font-weight: 900; letter-spacing: 0.15em; text-transform: uppercase; }
+.biome-card__copy strong { font-family: Georgia, serif; font-size: clamp(35px, 4vw, 54px); font-weight: 500; letter-spacing: -0.04em; line-height: 1; }
+.biome-card__copy > span { margin-top: 8px; color: rgba(255, 255, 255, 0.7); font-size: 12px; letter-spacing: 0.03em; }
+.biome-card__copy > b {
+  margin-top: 10px;
+  padding: 5px 9px;
+  border: 1px solid rgba(255,255,255,.28);
+  border-radius: 999px;
+  color: white;
+  background: rgba(5,35,24,.38);
+  font-size: 8px;
+  font-weight: 900;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+}
+.biome-card__action { position: absolute; right: 27px; bottom: 24px; color: rgba(255, 255, 255, 0.75); font-size: 11px; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; }
+.biome-card--locked { cursor: not-allowed; }
+.biome-card--locked > img { filter: saturate(0.25) brightness(0.68); }
+.biome-card--locked .biome-card__shade { background: rgba(9, 31, 23, 0.48); }
+.game-footer { padding: 24px max(24px, calc((100% - 1320px) / 2)); display: flex; justify-content: space-between; gap: 20px; color: rgba(255, 255, 255, 0.6); background: var(--forest-dark); font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; }
+
+.mission-screen { --accent: var(--sun); --deep: var(--forest); min-height: 100vh; background: var(--paper-light); }
+.habitat { position: relative; min-height: 510px; overflow: hidden; isolation: isolate; color: white; }
+.habitat__image, .result-screen__background { position: absolute; z-index: -3; inset: 0; width: 100%; height: 100%; object-fit: cover; animation: living-landscape 20s ease-in-out infinite alternate; }
+@keyframes living-landscape { from { transform: scale(1.02) translate3d(-0.4%, 0, 0); } to { transform: scale(1.08) translate3d(0.6%, -0.8%, 0); } }
+.habitat__veil { position: absolute; z-index: -2; inset: 0; background: linear-gradient(90deg, rgba(4, 31, 22, 0.85), rgba(5, 45, 30, 0.31) 61%, rgba(0, 0, 0, 0.16)), linear-gradient(0deg, rgba(7, 35, 25, 0.62), transparent 44%); }
+.back-button { position: absolute; z-index: 7; top: 28px; left: max(24px, calc((100% - 1320px) / 2)); padding: 11px 16px; border-radius: 999px; font-size: 11px; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; transition: background 200ms ease; }
+.back-button--light { color: white; border: 1px solid rgba(255, 255, 255, 0.35); background: rgba(4, 31, 22, 0.28); backdrop-filter: blur(10px); }
+.back-button:hover { background: rgba(4, 31, 22, 0.55); }
+.level-chip { position: absolute; z-index: 4; top: 28px; right: max(24px, calc((100% - 1320px) / 2)); display: flex; align-items: center; gap: 10px; font-size: 10px; font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase; }
+.level-chip span { padding: 9px 12px; border-radius: 999px; color: var(--deep); background: var(--accent); }
+.level-chip strong { color: rgba(255, 255, 255, 0.75); }
+.habitat__copy { position: absolute; z-index: 4; left: max(24px, calc((100% - 1320px) / 2)); bottom: 86px; width: min(660px, calc(100% - 48px)); }
+.habitat__copy > span { color: var(--accent); font-size: 11px; font-weight: 900; letter-spacing: 0.18em; text-transform: uppercase; }
+.habitat__copy h1 { margin: 8px 0 7px; font-size: clamp(61px, 9vw, 112px); line-height: 0.85; text-shadow: 0 6px 35px rgba(0, 0, 0, 0.22); }
+.habitat__copy p { max-width: 590px; margin: 21px 0 0; color: rgba(255, 255, 255, 0.82); font-size: 15px; line-height: 1.6; }
+.mission-instruction { position: absolute; z-index: 6; right: max(24px, calc((100% - 1320px) / 2)); bottom: 0; width: min(440px, calc(100% - 48px)); padding: 23px 28px; display: flex; gap: 19px; color: var(--ink); background: var(--accent); box-shadow: 0 18px 40px rgba(2, 25, 18, 0.23); }
+.mission-instruction__number { padding-top: 2px; color: color-mix(in srgb, var(--deep) 70%, transparent); font-family: Georgia, serif; font-size: 18px; }
+.mission-instruction strong { font-size: 11px; letter-spacing: 0.17em; text-transform: uppercase; }
+.mission-instruction p { margin: 6px 0 0; font-family: Georgia, serif; font-size: 17px; line-height: 1.3; }
+
+.puzzle { width: min(100% - 48px, 1180px); margin: 0 auto; padding: 80px 0 100px; }
+.puzzle__heading { display: flex; justify-content: space-between; align-items: flex-end; gap: 30px; margin-bottom: 35px; }
+.kicker--dark { margin-bottom: 8px; color: #907f4c; }
+.puzzle__heading h2 { margin: 0; color: var(--deep); font-size: clamp(35px, 4.5vw, 59px); }
+.hint-pill { padding: 10px 10px 10px 17px; border: 1px solid var(--line); border-radius: 999px; color: var(--deep); background: transparent; font-size: 11px; font-weight: 800; letter-spacing: 0.09em; text-transform: uppercase; }
+.hint-pill span { margin-left: 6px; width: 27px; height: 27px; display: inline-grid; place-items: center; border-radius: 50%; color: var(--paper-light); background: var(--deep); }
+.chain-slots { position: relative; display: grid; grid-template-columns: repeat(3, 1fr); gap: 62px; margin: 0 0 35px; }
+.chain-slot { position: relative; min-height: 230px; display: grid; place-items: center; align-content: center; gap: 8px; border: 2px dashed color-mix(in srgb, var(--deep) 25%, transparent); border-radius: 10px; background: radial-gradient(circle at center, color-mix(in srgb, var(--accent) 16%, transparent), transparent 64%), rgba(250, 248, 235, 0.8); }
+.chain-slot > small { color: #8e9c94; font-size: 9px; font-weight: 900; letter-spacing: 0.15em; text-transform: uppercase; }
+.chain-slot__number { width: 48px; height: 48px; display: grid; place-items: center; border: 1px solid var(--line); border-radius: 50%; color: #90a199; font-family: Georgia, serif; font-size: 23px; }
+.chain-slot--filled { border-style: solid; border-color: color-mix(in srgb, var(--deep) 28%, transparent); background: white; box-shadow: 0 10px 30px rgba(12, 58, 42, 0.09); animation: place-card 360ms cubic-bezier(.2,.8,.2,1); }
+@keyframes place-card { from { opacity: 0; transform: translateY(12px) scale(0.96); } to { opacity: 1; transform: translateY(0) scale(1); } }
+.chain-slot > button { width: 100%; min-height: 226px; padding: 12px; border: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--ink); background: transparent; cursor: pointer; }
+.chain-slot > button > small { color: #8b7a43; font-size: 9px; font-weight: 900; letter-spacing: 0.1em; text-transform: uppercase; }
+.chain-slot > button > strong { margin-top: 4px; font-family: Georgia, serif; font-size: 19px; font-weight: 600; }
+.chain-slot > button > i { position: absolute; top: 10px; right: 13px; color: #8d9b94; font-style: normal; font-size: 19px; }
+.chain-slot__art { width: 115px; height: 115px; margin-bottom: 6px; display: grid; place-items: center; overflow: hidden; border-radius: 50%; background: color-mix(in srgb, var(--accent) 22%, #fff); }
+.chain-slot__art img, .chain-slot__art > span { width: 100%; height: 100%; object-fit: contain; }
+.chain-slot__art > span { display: grid; place-items: center; font-size: 60px; }
+.energy-arrow { position: absolute; z-index: 3; top: 50%; left: calc(100% + 15px); width: 34px; display: flex; flex-direction: column; align-items: center; color: var(--deep); font-size: 28px; font-weight: 400; line-height: 0.7; transform: translateY(-50%); }
+.energy-arrow small { margin-top: 8px; color: #8e9b94; font-size: 7px; font-weight: 900; letter-spacing: 0.11em; text-transform: uppercase; }
+.species-tray { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; }
+.species-card { min-height: 150px; padding: 15px; border: 1px solid var(--line); border-radius: 8px; display: grid; grid-template-columns: 98px 1fr auto; align-items: center; gap: 15px; color: var(--ink); background: #fffef7; cursor: pointer; text-align: left; transition: border-color 180ms ease, transform 180ms ease, opacity 180ms ease; }
+.species-card:hover:not(:disabled) { border-color: var(--deep); transform: translateY(-3px); }
+.species-card:disabled { opacity: 0.32; cursor: default; }
+.species-card__art { width: 98px; height: 118px; overflow: hidden; display: grid; place-items: center; border-radius: 6px; background: color-mix(in srgb, var(--accent) 17%, #f1eedf); }
+.species-card__art img { width: 100%; height: 100%; object-fit: contain; mix-blend-mode: multiply; }
+.species-card__art > span { font-size: 54px; filter: drop-shadow(0 6px 5px rgba(36, 63, 50, 0.15)); }
+.species-card__copy { display: flex; flex-direction: column; gap: 8px; }
+.species-card__copy strong { font-family: Georgia, serif; font-size: 18px; line-height: 1.1; }
+.species-card__copy small { color: var(--ink-soft); font-size: 11px; line-height: 1.45; }
+.species-card__plus { width: 31px; height: 31px; display: grid; place-items: center; border-radius: 50%; color: white; background: var(--deep); font-size: 19px; }
+
+.feedback { max-height: 0; margin-top: 0; padding: 0 22px; overflow: hidden; opacity: 0; display: flex; align-items: center; gap: 15px; border-left: 4px solid var(--accent); background: color-mix(in srgb, var(--accent) 16%, white); transition: max-height 280ms ease, opacity 250ms ease, padding 280ms ease, margin 280ms ease; }
+.feedback--visible { max-height: 120px; margin-top: 20px; padding-top: 16px; padding-bottom: 16px; opacity: 1; }
+.feedback > span { color: #d48c12; font-size: 24px; }
+.feedback p { margin: 0; color: var(--ink-soft); font-size: 13px; line-height: 1.55; }
+.feedback strong { color: var(--ink); }
+.puzzle__actions, .result-actions { margin-top: 34px; display: flex; justify-content: flex-end; gap: 12px; }
+.button { min-height: 52px; padding: 0 22px; border: 1px solid transparent; border-radius: 4px; font-size: 11px; font-weight: 900; letter-spacing: 0.08em; text-transform: uppercase; cursor: pointer; transition: transform 180ms ease, opacity 180ms ease, background 180ms ease; }
+.button:hover:not(:disabled) { transform: translateY(-2px); }
+.button:disabled { opacity: 0.35; cursor: default; }
+.button--ghost { color: var(--deep); border-color: var(--line); background: transparent; }
+.button--primary { color: white; background: var(--deep); box-shadow: 0 10px 24px color-mix(in srgb, var(--deep) 25%, transparent); }
+.button--primary span { margin-left: 25px; font-size: 17px; }
+
+.result-screen { --accent: var(--sun); position: relative; min-height: 100vh; padding: 95px 24px 60px; display: grid; place-items: center; isolation: isolate; overflow: hidden; }
+.result-screen__veil { position: absolute; z-index: -2; inset: 0; background: rgba(6, 39, 28, 0.74); backdrop-filter: blur(4px); }
+.result-card { position: relative; z-index: 3; width: min(720px, 100%); padding: 49px 58px 45px; text-align: center; background: var(--paper-light); box-shadow: var(--shadow); }
+.result-card::before, .result-card::after { content: ""; position: absolute; width: 80px; height: 80px; border: 1px solid color-mix(in srgb, var(--accent) 50%, transparent); border-radius: 100% 0 100% 0; }
+.result-card::before { left: -34px; top: -27px; transform: rotate(25deg); }
+.result-card::after { right: -25px; bottom: -25px; transform: rotate(205deg); }
+.result-card__badge { display: inline-block; margin-bottom: 14px; color: #8d7b42; font-size: 10px; font-weight: 900; letter-spacing: 0.16em; text-transform: uppercase; }
+.result-card h1 { margin: 8px 0 10px; color: var(--forest); font-size: clamp(43px, 6vw, 68px); line-height: 0.95; }
+.result-card > p { margin: 0; color: var(--ink-soft); font-size: 14px; }
+.mini-chain { margin: 29px 0 25px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 26px; }
+.mini-chain__item { position: relative; min-width: 0; display: flex; flex-direction: column; align-items: center; gap: 8px; }
+.mini-chain__item > span { width: 86px; height: 86px; overflow: hidden; display: grid; place-items: center; border-radius: 50%; background: color-mix(in srgb, var(--accent) 23%, white); }
+.mini-chain__item img { width: 100%; height: 100%; object-fit: contain; mix-blend-mode: multiply; }
+.mini-chain__item > span > span { font-size: 42px; }
+.mini-chain__item strong { max-width: 120px; font-family: Georgia, serif; font-size: 14px; line-height: 1.1; }
+.mini-chain__item i { position: absolute; top: 33px; left: calc(100% + 4px); color: #8c9c93; font-style: normal; font-size: 22px; }
+.nature-fact { padding: 17px 20px; display: flex; gap: 14px; text-align: left; background: #eef3dd; }
+.nature-fact > span { color: #b48d19; font-size: 22px; }
+.nature-fact strong { color: #6d5d2f; font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; }
+.nature-fact p { margin: 5px 0 0; color: #59645d; font-size: 12px; line-height: 1.5; }
+.result-actions { justify-content: center; }
+
+@media (max-width: 900px) {
+  .hero-map { min-height: 640px; }
+  .biome-card:nth-child(n) { grid-column: span 6; min-height: 390px; }
+  .biome-card:nth-child(1) { grid-column: span 12; }
+  .section-heading { align-items: flex-start; flex-direction: column; }
+  .chain-slots { gap: 36px; }
+  .energy-arrow { left: calc(100% + 2px); }
+  .species-tray { grid-template-columns: 1fr; }
+  .species-card { min-height: 130px; }
+  .mission-instruction { width: 400px; }
+}
+
+@media (max-width: 650px) {
+  .topbar { width: calc(100% - 32px); height: 76px; }
+  .brand { font-size: 0; gap: 0; }
+  .brand__mark { width: 38px; height: 38px; }
+  .sound-button { font-size: 0; padding: 9px 13px; }
+  .sound-button span { font-size: 17px; }
+  .hero-map { min-height: 670px; align-items: flex-end; background-position: 60% center; }
+  .hero-map__copy { width: calc(100% - 32px); margin: 0 auto 62px; }
+  .hero-map h1 { font-size: clamp(47px, 14vw, 66px); }
+  .hero-map__copy > p { font-size: 15px; }
+  .progress-summary { grid-template-columns: auto auto; }
+  .progress-line { grid-column: 1 / -1; }
+  .expedition { width: calc(100% - 32px); padding: 68px 0; }
+  .section-heading > div { padding-left: 0; }
+  .section-number { position: static; display: block; margin-bottom: 8px; }
+  .section-heading h2 { font-size: 43px; }
+  .biome-grid { display: flex; flex-direction: column; }
+  .biome-card:nth-child(n) { min-height: 370px; }
+  .game-footer { flex-direction: column; }
+  .habitat { min-height: 600px; }
+  .habitat__image { object-position: center; }
+  .habitat__copy { bottom: 164px; }
+  .habitat__copy h1 { font-size: clamp(56px, 17vw, 85px); }
+  .mission-instruction { left: 16px; right: 16px; width: auto; }
+  .level-chip strong { display: none; }
+  .puzzle { width: calc(100% - 32px); padding: 60px 0 76px; }
+  .puzzle__heading { align-items: flex-start; }
+  .puzzle__heading h2 { font-size: 40px; }
+  .hint-pill { flex: 0 0 auto; font-size: 0; padding: 7px; }
+  .hint-pill span { margin: 0; }
+  .chain-slots { grid-template-columns: 1fr; gap: 47px; }
+  .chain-slot { min-height: 185px; }
+  .chain-slot > button { min-height: 181px; }
+  .chain-slot__art { width: 90px; height: 90px; }
+  .energy-arrow { top: calc(100% + 7px); left: 50%; transform: translateX(-50%) rotate(90deg); }
+  .energy-arrow small { display: none; }
+  .species-card { grid-template-columns: 80px 1fr auto; padding: 11px; }
+  .species-card__art { width: 80px; height: 104px; }
+  .species-card__copy small { display: none; }
+  .puzzle__actions { justify-content: stretch; }
+  .puzzle__actions .button { flex: 1; }
+  .button--primary span { margin-left: 8px; }
+  .result-screen { padding-inline: 13px; }
+  .result-card { padding: 42px 20px 32px; }
+  .mini-chain { gap: 8px; }
+  .mini-chain__item > span { width: 70px; height: 70px; }
+  .mini-chain__item i { left: calc(100% - 3px); top: 27px; }
+  .result-actions { flex-direction: column-reverse; }
+  .result-actions .button { width: 100%; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { scroll-behavior: auto !important; animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
+  .ambient-canvas { display: none; }
+}
+
+/* Full-screen playable biome — the learning activity lives inside the world. */
+.map-version {
+  color: rgba(255, 255, 255, 0.66);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+}
+
+.hero-play {
+  margin-top: 28px;
+  min-height: 56px;
+  padding: 0 19px 0 24px;
+  border: 0;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  gap: 18px;
+  color: #133e2f;
+  background: var(--sun);
+  box-shadow: 0 14px 32px rgba(2, 23, 17, 0.3);
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  transition: transform 180ms ease, box-shadow 180ms ease;
+}
+
+.hero-play:hover { transform: translateY(-3px) scale(1.02); box-shadow: 0 20px 36px rgba(2, 23, 17, 0.36); }
+.hero-play span { width: 32px; height: 32px; display: grid; place-items: center; border-radius: 50%; color: white; background: #174f38; font-size: 11px; }
+
+.world-game {
+  --accent: #f5c84c;
+  --deep: #174f38;
+  position: relative;
+  min-height: max(720px, 100svh);
+  overflow: hidden;
+  isolation: isolate;
+  color: white;
+  background: var(--deep);
+  user-select: none;
+}
+
+.world-game__backdrop {
+  position: absolute;
+  z-index: -5;
+  inset: -3%;
+  width: 106%;
+  height: 106%;
+  object-fit: cover;
+  animation: game-camera 22s ease-in-out infinite alternate;
+}
+
+@keyframes game-camera {
+  from { transform: scale(1.01) translate3d(-0.5%, 0, 0); }
+  to { transform: scale(1.07) translate3d(0.7%, -0.4%, 0); }
+}
+
+.world-game__grade {
+  position: absolute;
+  z-index: -3;
+  inset: 0;
+  background:
+    linear-gradient(180deg, rgba(4, 30, 21, 0.72) 0, rgba(4, 30, 21, 0.05) 25%, transparent 51%, rgba(2, 25, 17, 0.47) 77%, rgba(2, 20, 14, 0.88) 100%),
+    radial-gradient(circle at 50% 35%, transparent 15%, rgba(1, 21, 13, 0.2) 95%);
+}
+
+.sun-rays {
+  position: absolute;
+  z-index: -2;
+  top: -34%;
+  left: 24%;
+  width: 70vw;
+  height: 110vh;
+  opacity: 0.32;
+  background: conic-gradient(from 188deg at 50% 0%, transparent 0deg 14deg, rgba(255, 244, 177, 0.3) 15deg 24deg, transparent 25deg 41deg, rgba(255, 244, 177, 0.19) 42deg 51deg, transparent 52deg 360deg);
+  filter: blur(8px);
+  transform-origin: 50% 0;
+  animation: ray-breathe 9s ease-in-out infinite;
+}
+
+@keyframes ray-breathe { 50% { opacity: 0.5; transform: rotate(2deg) scaleX(1.06); } }
+
+.mist {
+  position: absolute;
+  z-index: 1;
+  left: -20%;
+  width: 140%;
+  height: 20%;
+  border-radius: 50%;
+  opacity: 0.15;
+  background: linear-gradient(90deg, transparent, #e2f1d6 28%, transparent 68%);
+  filter: blur(22px);
+  pointer-events: none;
+  animation: mist-drift 16s ease-in-out infinite alternate;
+}
+
+.mist--one { top: 43%; }
+.mist--two { top: 59%; opacity: 0.1; animation-delay: -8s; animation-direction: alternate-reverse; }
+@keyframes mist-drift { from { transform: translateX(-5%); } to { transform: translateX(9%); } }
+
+.game-hud {
+  position: absolute;
+  z-index: 20;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 91px;
+  padding: 18px clamp(18px, 3vw, 45px);
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 22px;
+}
+
+.game-hud::after {
+  content: "";
+  position: absolute;
+  left: 3%;
+  right: 3%;
+  bottom: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,.25), transparent);
+}
+
+.game-back {
+  position: relative;
+  z-index: 30;
+  width: max-content;
+  min-height: 43px;
+  padding: 0 16px;
+  border: 1px solid rgba(255, 255, 255, 0.32);
+  border-radius: 999px;
+  color: white;
+  background: rgba(5, 35, 24, 0.42);
+  box-shadow: inset 0 1px rgba(255,255,255,.12), 0 9px 22px rgba(0,0,0,.12);
+  backdrop-filter: blur(12px);
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 900;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+
+.biome-plaque {
+  min-width: 250px;
+  padding: 9px 24px 11px;
+  border: 1px solid rgba(255, 255, 255, 0.24);
+  border-radius: 0 0 36px 36px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: rgba(8, 57, 39, 0.62);
+  box-shadow: 0 12px 32px rgba(0,0,0,.13), inset 0 1px rgba(255,255,255,.1);
+  backdrop-filter: blur(12px);
+}
+
+.biome-plaque small { color: var(--accent); font-size: 8px; font-weight: 900; letter-spacing: .18em; text-transform: uppercase; }
+.biome-plaque strong { margin-top: 2px; font-family: Georgia, serif; font-size: 25px; font-weight: 500; letter-spacing: -.03em; }
+
+.mission-progress {
+  justify-self: end;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 7px 12px;
+  border-radius: 999px;
+  color: rgba(255,255,255,.7);
+  background: rgba(5, 35, 24, 0.38);
+  backdrop-filter: blur(10px);
+  font: 800 10px/1 "Trebuchet MS", sans-serif;
+}
+
+.mission-progress span:first-child { width: 25px; height: 25px; display: grid; place-items: center; border-radius: 50%; color: #163d2f; background: var(--accent); }
+.mission-progress i { width: 32px; height: 2px; background: rgba(255,255,255,.24); }
+
+.forest-guide {
+  position: absolute;
+  z-index: 15;
+  top: 108px;
+  left: 50%;
+  width: min(590px, calc(100% - 36px));
+  min-height: 74px;
+  padding: 13px 24px 13px 79px;
+  border: 1px solid rgba(255,255,255,.45);
+  border-radius: 16px 16px 16px 4px;
+  color: #25473a;
+  background: rgba(255, 252, 226, 0.93);
+  box-shadow: 0 15px 40px rgba(2, 24, 16, .23), inset 0 1px white;
+  backdrop-filter: blur(12px);
+  transform: translateX(-50%);
+  transition: background 250ms ease, transform 250ms ease;
+}
+
+.forest-guide::after {
+  content: "";
+  position: absolute;
+  left: 28px;
+  bottom: -13px;
+  border-width: 13px 14px 0 0;
+  border-style: solid;
+  border-color: rgba(255, 252, 226, 0.93) transparent transparent transparent;
+}
+
+.forest-guide small { display: block; margin-bottom: 4px; color: #9b7624; font-size: 8px; font-weight: 900; letter-spacing: .18em; text-transform: uppercase; }
+.forest-guide strong { display: block; font-family: Georgia, serif; font-size: clamp(14px, 1.5vw, 18px); font-weight: 500; line-height: 1.25; }
+.forest-guide--wrong { background: rgba(255, 237, 192, .97); animation: guide-pop 400ms cubic-bezier(.2,.8,.2,1); }
+.forest-guide--hint { background: rgba(226, 246, 201, .97); }
+.forest-guide--correct { background: rgba(214, 250, 205, .97); animation: guide-pop 400ms cubic-bezier(.2,.8,.2,1); }
+.forest-guide--repeat { background: rgba(255, 244, 202, .97); }
+.forest-guide--hint::after { border-top-color: rgba(226, 246, 201, .97); }
+.forest-guide--correct::after { border-top-color: rgba(214, 250, 205, .97); }
+.forest-guide--repeat::after,
+.forest-guide--wrong::after { border-top-color: rgba(255, 240, 195, .97); }
+@keyframes guide-pop { 30% { transform: translateX(-50%) scale(1.04) rotate(-.5deg); } }
+
+.forest-guide__mascot {
+  position: absolute;
+  left: 15px;
+  top: 9px;
+  width: 52px;
+  height: 52px;
+  border-radius: 50% 50% 48% 52%;
+  display: grid;
+  place-items: center;
+  color: #594315;
+  background: radial-gradient(circle at 38% 32%, #fff7b5 0 7%, #fbd45c 32%, #d99c24 100%);
+  box-shadow: 0 5px 13px rgba(78, 53, 8, .25);
+  animation: mascot-float 3s ease-in-out infinite;
+}
+
+.forest-guide__mascot > span { font-size: 19px; animation: mascot-twinkle 1.8s ease-in-out infinite; }
+.forest-guide__mascot i { position: absolute; top: 19px; width: 4px; height: 5px; border-radius: 50%; background: #4b3a1a; }
+.forest-guide__mascot i:nth-of-type(1) { left: 15px; }
+.forest-guide__mascot i:nth-of-type(2) { right: 15px; }
+@keyframes mascot-float { 50% { transform: translateY(-5px) rotate(3deg); } }
+@keyframes mascot-twinkle { 50% { opacity: .45; transform: scale(.75); } }
+
+.forest-actors {
+  position: absolute;
+  z-index: 7;
+  inset: 0;
+  pointer-events: none;
+}
+
+.forest-actor {
+  position: absolute;
+  width: clamp(185px, 22vw, 360px);
+  height: clamp(210px, 35vh, 430px);
+  padding: 0;
+  border: 0;
+  overflow: visible;
+  color: white;
+  background: transparent;
+  cursor: pointer;
+  pointer-events: auto;
+  transition: filter 250ms ease, transform 300ms cubic-bezier(.2,.85,.2,1);
+}
+
+.forest-actor:nth-child(1) { left: 34%; bottom: 15%; }
+.forest-actor:nth-child(2) { left: 4%; bottom: 13%; }
+.forest-actor:nth-child(3) { right: 5%; bottom: 14%; }
+.forest-actor--castanheira { left: 3% !important; bottom: 11% !important; width: clamp(270px, 31vw, 510px); height: clamp(340px, 63vh, 650px); }
+.forest-actor--cutia { left: 33% !important; bottom: 14% !important; width: clamp(190px, 20vw, 320px); height: clamp(205px, 32vh, 340px); }
+.forest-actor--onca, .forest-actor--onca-mata { right: 4% !important; bottom: 13% !important; width: clamp(275px, 31vw, 480px); height: clamp(250px, 43vh, 440px); }
+.forest-actor--embauba,
+.forest-actor--figueira { left: 1% !important; bottom: 10% !important; width: clamp(265px, 30vw, 480px); height: clamp(360px, 60vh, 620px); }
+.forest-actor--capim-caatinga,
+.forest-actor--capim-cerrado,
+.forest-actor--pequizeiro,
+.forest-actor--capim-pampa,
+.forest-actor--mandacaru { left: 3% !important; bottom: 12% !important; width: clamp(210px, 25vw, 400px); height: clamp(280px, 47vh, 500px); }
+.forest-actor--prea,
+.forest-actor--moco,
+.forest-actor--rato-campo,
+.forest-actor--tuco-tuco,
+.forest-actor--gafanhoto { left: 34% !important; bottom: 15% !important; width: clamp(170px, 19vw, 300px); height: clamp(190px, 30vh, 320px); }
+.forest-actor--preguica,
+.forest-actor--bugio,
+.forest-actor--veado-campeiro { left: 31% !important; bottom: 14% !important; width: clamp(210px, 23vw, 370px); height: clamp(240px, 39vh, 410px); }
+.forest-actor--harpia,
+.forest-actor--carcara,
+.forest-actor--seriema,
+.forest-actor--lobo-guara,
+.forest-actor--onca-parda,
+.forest-actor--graxaim { right: 4% !important; bottom: 13% !important; width: clamp(230px, 27vw, 430px); height: clamp(250px, 42vh, 440px); }
+
+.forest-actor__art {
+  position: absolute;
+  z-index: 2;
+  inset: 0;
+  display: grid;
+  place-items: end center;
+  transform-origin: 50% 90%;
+  animation: actor-idle 3.6s ease-in-out infinite;
+  filter: drop-shadow(0 19px 10px rgba(1, 19, 12, .34));
+}
+
+.forest-actor:nth-child(2) .forest-actor__art { animation-delay: -1.2s; }
+.forest-actor:nth-child(3) .forest-actor__art { animation-delay: -2.1s; }
+@keyframes actor-idle { 0%, 100% { transform: translateY(0) rotate(-.5deg); } 50% { transform: translateY(-7px) rotate(.8deg); } }
+.forest-actor--castanheira .forest-actor__art,
+.forest-actor--embauba .forest-actor__art,
+.forest-actor--figueira .forest-actor__art,
+.forest-actor--butiazeiro .forest-actor__art,
+.forest-actor--mandacaru .forest-actor__art,
+.forest-actor--capim-caatinga .forest-actor__art,
+.forest-actor--capim-cerrado .forest-actor__art,
+.forest-actor--pequizeiro .forest-actor__art,
+.forest-actor--capim-pampa .forest-actor__art { animation-name: plant-sway; animation-duration: 5.2s; transform-origin: 50% 100%; }
+.forest-actor--gafanhoto .forest-actor__art { animation-duration: 2.2s; }
+@keyframes plant-sway {
+  0%, 100% { transform: translateY(0) rotate(-.8deg) skewX(-.3deg); }
+  50% { transform: translateY(-4px) rotate(1.2deg) skewX(.5deg); }
+}
+
+.forest-actor__art img { width: 100%; height: 100%; object-fit: contain; object-position: center bottom; }
+.forest-actor__art > span { align-self: end; font-size: clamp(115px, 17vw, 250px); filter: drop-shadow(0 14px 9px rgba(0,0,0,.28)); }
+
+.forest-actor__glow {
+  position: absolute;
+  z-index: 1;
+  left: 50%;
+  bottom: 4%;
+  width: 75%;
+  height: 26%;
+  border-radius: 50%;
+  opacity: 0;
+  background: radial-gradient(ellipse, color-mix(in srgb, var(--accent) 75%, white), transparent 68%);
+  filter: blur(9px);
+  transform: translateX(-50%);
+  transition: opacity 200ms ease;
+}
+
+.forest-actor:hover:not(:disabled) { z-index: 10; transform: translateY(-8px) scale(1.04); }
+.forest-actor:hover:not(:disabled) .forest-actor__glow { opacity: .75; }
+.forest-actor:hover:not(:disabled) .forest-actor__art { animation-play-state: paused; }
+
+.forest-actor__name {
+  position: absolute;
+  z-index: 5;
+  left: 50%;
+  bottom: -6px;
+  max-width: 190px;
+  padding: 8px 13px;
+  border: 1px solid rgba(255,255,255,.32);
+  border-radius: 999px;
+  color: white;
+  background: rgba(5, 38, 26, .72);
+  box-shadow: 0 7px 19px rgba(0,0,0,.18);
+  backdrop-filter: blur(8px);
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: .04em;
+  text-align: center;
+  text-transform: uppercase;
+  transform: translateX(-50%);
+  white-space: nowrap;
+}
+
+.forest-actor__tap,
+.forest-actor__order {
+  position: absolute;
+  z-index: 6;
+  top: 7%;
+  right: 8%;
+  width: 43px;
+  height: 43px;
+  display: grid;
+  place-items: center;
+  border: 3px solid rgba(255,255,255,.78);
+  border-radius: 50%;
+  color: #204837;
+  background: var(--accent);
+  box-shadow: 0 8px 22px rgba(0,0,0,.24);
+  font: 900 23px/1 Georgia, serif;
+  animation: tap-pulse 1.8s ease-in-out infinite;
+}
+
+.forest-actor__order { color: white; background: #174d39; animation: order-pop 420ms cubic-bezier(.2,.85,.2,1); }
+@keyframes tap-pulse { 50% { transform: scale(1.12); box-shadow: 0 8px 26px rgba(244, 208, 83, .55); } }
+@keyframes order-pop { from { transform: scale(.4) rotate(-20deg); } to { transform: scale(1) rotate(0); } }
+.forest-actor--selected { filter: saturate(.76) brightness(.9); }
+.forest-actor--selected .forest-actor__glow { opacity: .62; }
+
+.world-game--wrong .forest-actor--selected { animation: actor-wrong 430ms ease; }
+@keyframes actor-wrong { 20%, 60% { transform: translateX(-7px); } 40%, 80% { transform: translateX(7px); } }
+
+.forest-floor {
+  position: absolute;
+  z-index: 3;
+  left: -3%;
+  right: -3%;
+  bottom: -9%;
+  height: 26%;
+  opacity: .52;
+  background: radial-gradient(ellipse at 50% 0, rgba(49, 75, 27, .25), rgba(2, 25, 14, .9) 70%);
+  border-radius: 50% 50% 0 0;
+  pointer-events: none;
+}
+
+.foreground-leaves { position: absolute; z-index: 12; bottom: -30px; width: 230px; height: 280px; pointer-events: none; filter: drop-shadow(0 12px 16px rgba(0,0,0,.25)); }
+.foreground-leaves--left { left: -55px; transform: rotate(8deg); }
+.foreground-leaves--right { right: -65px; transform: scaleX(-1) rotate(11deg); }
+.foreground-leaves i { position: absolute; bottom: 0; left: 80px; width: 75px; height: 210px; border-radius: 100% 0 100% 0; background: linear-gradient(125deg, #2e7542, #0e3e27 70%); transform-origin: bottom; }
+.foreground-leaves i:nth-child(1) { transform: rotate(-34deg) scale(.85); }
+.foreground-leaves i:nth-child(2) { transform: rotate(2deg); }
+.foreground-leaves i:nth-child(3) { transform: rotate(39deg) scale(.78); }
+
+.energy-path {
+  position: absolute;
+  z-index: 18;
+  left: 50%;
+  bottom: 25px;
+  width: min(710px, calc(100% - 340px));
+  min-height: 114px;
+  padding: 16px 23px 13px;
+  border: 1px solid rgba(255,255,255,.24);
+  border-radius: 25px 25px 8px 8px;
+  color: white;
+  background: linear-gradient(180deg, rgba(8, 58, 39, .9), rgba(5, 37, 25, .94));
+  box-shadow: 0 17px 42px rgba(0,0,0,.32), inset 0 1px rgba(255,255,255,.12);
+  backdrop-filter: blur(14px);
+  transform: translateX(-50%);
+}
+
+.energy-path__header { min-height: 17px; margin-bottom: 8px; display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.energy-path__title { display: block; color: var(--accent); font-size: 8px; font-weight: 900; letter-spacing: .18em; text-transform: uppercase; }
+.chain-discoveries { display: flex; align-items: center; gap: 5px; color: rgba(255,255,255,.48); }
+.chain-discoveries strong { margin-left: 3px; color: white; font-size: 9px; }
+.chain-dot { color: rgba(255,255,255,.22); font-style: normal; font-size: 10px; transition: color 220ms ease, transform 220ms ease; }
+.chain-dot--found { color: var(--accent); transform: scale(1.15); text-shadow: 0 0 10px color-mix(in srgb, var(--accent) 70%, transparent); }
+.world-game--correct .energy-path {
+  border-color: color-mix(in srgb, var(--accent) 72%, white);
+  box-shadow: 0 17px 42px rgba(0,0,0,.32), 0 0 35px color-mix(in srgb, var(--accent) 28%, transparent), inset 0 1px rgba(255,255,255,.12);
+}
+.world-game--correct .chain-dot--found { animation: discovery-pop 600ms cubic-bezier(.2,.85,.2,1); }
+@keyframes discovery-pop { 45% { transform: scale(1.8) rotate(14deg); } }
+.energy-path__slots { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; }
+
+.seed-slot {
+  position: relative;
+  min-width: 0;
+  height: 65px;
+  border: 1px dashed rgba(255,255,255,.34);
+  border-radius: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  color: rgba(255,255,255,.56);
+  background: rgba(255,255,255,.05);
+}
+
+.seed-slot > span { width: 27px; height: 27px; display: grid; place-items: center; border: 1px solid rgba(255,255,255,.28); border-radius: 50%; font: 500 15px/1 Georgia, serif; }
+.seed-slot > small { font-size: 7px; font-weight: 900; letter-spacing: .12em; text-transform: uppercase; }
+.seed-slot > b { position: absolute; left: calc(100% + 8px); top: 50%; color: var(--accent); font-size: 17px; transform: translateY(-50%); }
+.seed-slot--filled { border-style: solid; border-color: color-mix(in srgb, var(--accent) 70%, white); background: rgba(255,255,255,.13); animation: seed-fill 320ms cubic-bezier(.2,.85,.2,1); }
+@keyframes seed-fill { from { opacity: .4; transform: scale(.85); } to { opacity: 1; transform: scale(1); } }
+.seed-slot button { position: relative; width: 100%; height: 100%; padding: 5px 27px 5px 7px; border: 0; display: flex; align-items: center; gap: 8px; color: white; background: transparent; cursor: pointer; }
+.seed-slot button > span { flex: 0 0 51px; height: 51px; overflow: hidden; display: grid; place-items: center; border-radius: 50%; background: rgba(255,255,255,.9); }
+.seed-slot button img { width: 100%; height: 100%; object-fit: contain; }
+.seed-slot button > span > span { font-size: 28px; }
+.seed-slot button strong { overflow: hidden; font-family: Georgia, serif; font-size: 11px; font-weight: 500; line-height: 1.1; text-overflow: ellipsis; }
+.seed-slot button i { position: absolute; right: 10px; color: rgba(255,255,255,.58); font-style: normal; font-size: 15px; }
+
+.game-actions {
+  position: absolute;
+  z-index: 19;
+  right: clamp(18px, 3vw, 45px);
+  bottom: 47px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.round-action {
+  width: 48px;
+  height: 48px;
+  border: 1px solid rgba(255,255,255,.35);
+  border-radius: 50%;
+  color: white;
+  background: rgba(5, 39, 27, .7);
+  backdrop-filter: blur(9px);
+  cursor: pointer;
+  font: 600 19px/1 Georgia, serif;
+}
+.round-action:disabled { opacity: .35; cursor: default; }
+
+.wood-button {
+  min-height: 51px;
+  padding: 0 19px 0 22px;
+  border: 2px solid #704317;
+  border-radius: 8px 18px 7px 16px;
+  color: #fff7d7;
+  background: linear-gradient(180deg, #a96727, #774417);
+  box-shadow: inset 0 2px rgba(255,255,255,.18), inset 0 -3px rgba(63,31,6,.25), 0 9px 20px rgba(0,0,0,.26);
+  cursor: pointer;
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: .09em;
+  text-transform: uppercase;
+  transition: filter 180ms ease, transform 180ms ease, opacity 180ms ease;
+}
+
+.wood-button span { margin-left: 14px; font-size: 16px; }
+.wood-button:hover:not(:disabled) { filter: brightness(1.12); transform: translateY(-2px) rotate(-.3deg); }
+.wood-button:disabled { opacity: .45; cursor: default; filter: grayscale(.45); }
+.wood-button--light { color: #244334; border-color: rgba(31,70,52,.28); background: #fff7dc; }
+
+.game-footnote {
+  position: absolute;
+  z-index: 14;
+  left: clamp(18px, 3vw, 45px);
+  bottom: 17px;
+  margin: 0;
+  color: rgba(255,255,255,.52);
+  font-size: 8px;
+  font-weight: 800;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+
+.world-game--success .world-game__grade { background: linear-gradient(90deg, rgba(3, 29, 20, .83), rgba(4, 36, 24, .27) 62%, rgba(4, 28, 18, .36)); }
+.world-game--success .game-back { position: absolute; top: 25px; left: 30px; }
+.world-game--success .forest-actors { filter: brightness(1.04) saturate(1.1); }
+.world-game--success .forest-actor__tap, .world-game--success .forest-actor__order { display: none; }
+.world-game--success .forest-actor__name { background: rgba(5, 38, 26, .55); }
+
+.victory-panel {
+  position: absolute;
+  z-index: 20;
+  top: 14%;
+  left: clamp(28px, 6vw, 100px);
+  width: min(430px, calc(100% - 56px));
+  padding: 36px 38px;
+  border: 1px solid rgba(255,255,255,.5);
+  border-radius: 30px 30px 30px 6px;
+  color: #264636;
+  background: rgba(255, 249, 218, .94);
+  box-shadow: 0 30px 70px rgba(0,0,0,.28), inset 0 1px white;
+  backdrop-filter: blur(12px);
+  animation: victory-arrive 650ms cubic-bezier(.2,.8,.2,1);
+}
+
+@keyframes victory-arrive { from { opacity: 0; transform: translateY(25px) scale(.94) rotate(-1deg); } to { opacity: 1; transform: none; } }
+.victory-panel__eyebrow { color: #9d761d; font-size: 9px; font-weight: 900; letter-spacing: .18em; text-transform: uppercase; }
+.victory-panel .stars { display: flex; margin: 11px 0; color: rgba(29,70,51,.18); }
+.victory-panel h1 { margin: 0; font-family: Georgia, serif; font-size: clamp(45px, 5vw, 70px); font-weight: 500; letter-spacing: -.055em; line-height: .88; }
+.victory-panel h1 em { color: #ad7918; font-weight: 500; }
+.victory-panel > p { margin: 22px 0 0; color: #566b5f; font-size: 13px; line-height: 1.55; }
+.victory-actions { margin-top: 25px; display: flex; gap: 9px; }
+
+.celebration-stars { position: absolute; z-index: 16; inset: 0; overflow: hidden; pointer-events: none; }
+.celebration-stars i { position: absolute; left: calc((var(--i, 1) * 5.5%) + 1%); top: -10%; color: var(--accent); font-style: normal; font-size: 16px; animation: star-fall 4s linear infinite; }
+.celebration-stars i:nth-child(1) { left: 5%; animation-delay: -.4s; }.celebration-stars i:nth-child(2) { left: 11%; animation-delay: -2.3s; }.celebration-stars i:nth-child(3) { left: 17%; animation-delay: -1.2s; }.celebration-stars i:nth-child(4) { left: 23%; animation-delay: -3.1s; }.celebration-stars i:nth-child(5) { left: 31%; animation-delay: -.8s; }.celebration-stars i:nth-child(6) { left: 38%; animation-delay: -2.7s; }.celebration-stars i:nth-child(7) { left: 45%; animation-delay: -1.8s; }.celebration-stars i:nth-child(8) { left: 52%; animation-delay: -3.4s; }.celebration-stars i:nth-child(9) { left: 59%; animation-delay: -.1s; }.celebration-stars i:nth-child(10) { left: 65%; animation-delay: -2.1s; }.celebration-stars i:nth-child(11) { left: 71%; animation-delay: -1.4s; }.celebration-stars i:nth-child(12) { left: 77%; animation-delay: -3.6s; }.celebration-stars i:nth-child(13) { left: 83%; animation-delay: -.7s; }.celebration-stars i:nth-child(14) { left: 89%; animation-delay: -2.6s; }.celebration-stars i:nth-child(15) { left: 95%; animation-delay: -1.1s; }.celebration-stars i:nth-child(16) { left: 42%; animation-delay: -3.8s; }.celebration-stars i:nth-child(17) { left: 68%; animation-delay: -.3s; }.celebration-stars i:nth-child(18) { left: 26%; animation-delay: -2.9s; }
+@keyframes star-fall { to { transform: translateY(115vh) rotate(280deg); opacity: .1; } }
+
+@media (max-width: 960px) {
+  .world-game { min-height: max(740px, 100svh); }
+  .forest-guide { top: 101px; }
+  .forest-actor--castanheira { left: -3% !important; width: min(390px, 40vw); }
+  .forest-actor--cutia { left: 31% !important; }
+  .forest-actor--onca, .forest-actor--onca-mata { right: -3% !important; width: min(390px, 38vw); }
+  .energy-path { width: min(610px, calc(100% - 210px)); left: 42%; }
+  .seed-slot button strong { display: none; }
+  .game-actions { right: 18px; }
+  .game-footnote { display: none; }
+}
+
+@media (max-width: 680px) {
+  .map-version { display: none; }
+  .world-game { min-height: max(770px, 100svh); }
+  .world-game__backdrop { inset: -2%; width: 104%; height: 104%; object-position: 51% center; }
+  .game-hud { height: 78px; padding: 12px 12px; grid-template-columns: auto 1fr auto; gap: 7px; }
+  .game-back { min-height: 39px; padding: 0 12px; }
+  .game-back span { display: none; }
+  .biome-plaque { min-width: 0; padding: 7px 14px 9px; }
+  .biome-plaque strong { font-size: 20px; }
+  .mission-progress { padding: 6px 8px; gap: 6px; }
+  .mission-progress i { width: 12px; }
+  .forest-guide { top: 89px; width: calc(100% - 24px); min-height: 76px; padding: 13px 15px 13px 72px; }
+  .forest-guide__mascot { left: 12px; top: 11px; width: 49px; height: 49px; }
+  .forest-guide strong { font-size: 14px; }
+  .forest-actor__name { max-width: 120px; padding: 6px 9px; font-size: 8px; }
+  .forest-actor__tap, .forest-actor__order { width: 35px; height: 35px; border-width: 2px; font-size: 18px; }
+  .forest-actor--castanheira { left: -8% !important; bottom: 23% !important; width: 52vw; height: 47vh; }
+  .forest-actor--cutia { left: 27% !important; bottom: 24% !important; width: 35vw; height: 25vh; }
+  .forest-actor--onca, .forest-actor--onca-mata { right: -8% !important; bottom: 24% !important; width: 48vw; height: 32vh; }
+  .forest-actor:nth-child(1) { left: 29%; bottom: 25%; width: 35vw; }
+  .forest-actor:nth-child(2) { left: -4%; bottom: 25%; width: 39vw; }
+  .forest-actor:nth-child(3) { right: -3%; bottom: 25%; width: 42vw; }
+  .forest-actor--embauba,
+  .forest-actor--figueira,
+  .forest-actor--capim-caatinga,
+  .forest-actor--capim-cerrado,
+  .forest-actor--pequizeiro,
+  .forest-actor--capim-pampa,
+  .forest-actor--mandacaru { left: -5% !important; bottom: 24% !important; width: 44vw; height: 40vh; }
+  .forest-actor--prea,
+  .forest-actor--moco,
+  .forest-actor--rato-campo,
+  .forest-actor--tuco-tuco,
+  .forest-actor--gafanhoto { left: 28% !important; bottom: 25% !important; width: 34vw; height: 25vh; }
+  .forest-actor--preguica,
+  .forest-actor--bugio,
+  .forest-actor--veado-campeiro { left: 27% !important; bottom: 24% !important; width: 38vw; height: 30vh; }
+  .forest-actor--harpia,
+  .forest-actor--carcara,
+  .forest-actor--seriema,
+  .forest-actor--lobo-guara,
+  .forest-actor--onca-parda,
+  .forest-actor--graxaim { right: -4% !important; bottom: 24% !important; width: 45vw; height: 33vh; }
+  .foreground-leaves { width: 130px; height: 180px; opacity: .75; }
+  .foreground-leaves i { left: 50px; width: 54px; height: 140px; }
+  .energy-path { left: 12px; right: 12px; bottom: 75px; width: auto; min-height: 106px; padding: 13px 12px 11px; transform: none; }
+  .energy-path__slots { gap: 22px; }
+  .seed-slot { height: 61px; }
+  .seed-slot > b { left: calc(100% + 4px); font-size: 14px; }
+  .seed-slot button { justify-content: center; padding: 4px; }
+  .seed-slot button > span { flex-basis: 47px; height: 47px; }
+  .seed-slot button i { right: 5px; top: 2px; }
+  .game-actions { left: 12px; right: 12px; bottom: 14px; justify-content: flex-end; }
+  .game-actions .wood-button { flex: 1; max-width: 220px; }
+  .victory-panel { top: 10%; left: 14px; width: calc(100% - 28px); padding: 29px 25px; }
+  .world-game--success .forest-actors { opacity: .58; }
+  .world-game--success .game-back { top: 12px; left: 12px; }
+  .victory-actions { flex-direction: column-reverse; }
+  .victory-actions .wood-button { width: 100%; }
+}
+
+/* Scene depth, grounding and environmental life. */
+.world-game {
+  --far-x: 0px;
+  --far-y: 0px;
+  --mid-x: 0px;
+  --mid-y: 0px;
+  --near-x: 0px;
+  --near-y: 0px;
+}
+
+.world-game__backdrop {
+  translate: var(--far-x) var(--far-y);
+  transition: translate 700ms cubic-bezier(.2,.75,.2,1);
+  filter: saturate(.92) contrast(1.02) brightness(.91);
+}
+
+.ambient-canvas--back { z-index: 3; }
+.ambient-canvas--front { z-index: 14; opacity: .72; translate: var(--near-x) var(--near-y); transition: translate 500ms ease-out; }
+
+.sun-rays,
+.mist,
+.water-shimmer,
+.forest-birds,
+.butterflies {
+  translate: var(--mid-x) var(--mid-y);
+  transition: translate 800ms cubic-bezier(.2,.75,.2,1);
+}
+
+.forest-actors,
+.world-occlusion {
+  translate: var(--mid-x) var(--mid-y);
+  transition: translate 540ms cubic-bezier(.2,.75,.2,1);
+}
+
+.world-canopy-layer,
+.foreground-leaves {
+  translate: var(--near-x) var(--near-y);
+  transition: translate 430ms cubic-bezier(.2,.75,.2,1);
+}
+
+.forest-actor::before {
+  content: "";
+  position: absolute;
+  z-index: 0;
+  left: 50%;
+  bottom: 1.5%;
+  width: 72%;
+  height: 11%;
+  border-radius: 50%;
+  background: radial-gradient(ellipse, rgba(0, 12, 7, .75), rgba(8, 30, 16, .34) 50%, transparent 74%);
+  filter: blur(7px);
+  transform: translateX(-50%) skewX(-8deg);
+  transform-origin: center;
+}
+
+.forest-actor--castanheira::before { bottom: 0; width: 58%; height: 8%; filter: blur(11px); }
+.forest-actor--cutia::before { bottom: 2%; width: 68%; height: 10%; }
+.forest-actor--onca::before,
+.forest-actor--onca-mata::before { bottom: 1%; width: 88%; height: 13%; filter: blur(9px); }
+
+.forest-actor__art {
+  filter:
+    saturate(.82)
+    brightness(.86)
+    contrast(.96)
+    hue-rotate(-4deg)
+    drop-shadow(0 19px 10px rgba(1, 19, 12, .34));
+  transition: filter 260ms ease;
+}
+
+.forest-actor:hover:not(:disabled) .forest-actor__art {
+  filter:
+    saturate(.98)
+    brightness(.99)
+    contrast(1)
+    drop-shadow(0 22px 12px rgba(1, 19, 12, .38));
+}
+
+.forest-actor--selected .forest-actor__art {
+  animation: actor-chosen 520ms cubic-bezier(.2,.85,.2,1), actor-idle 3.6s 520ms ease-in-out infinite;
+}
+
+@keyframes actor-chosen {
+  0% { transform: translateY(0) scale(1); }
+  45% { transform: translateY(-18px) scale(1.045) rotate(1.3deg); }
+  100% { transform: translateY(0) scale(1); }
+}
+
+.world-canopy-layer {
+  position: absolute;
+  z-index: 13;
+  inset: -3%;
+  width: 106%;
+  height: 106%;
+  object-fit: cover;
+  pointer-events: none;
+  filter: saturate(.88) brightness(.72) drop-shadow(0 18px 18px rgba(0,0,0,.2));
+  transform-origin: 50% 0;
+  animation: canopy-breathe 7s ease-in-out infinite;
+}
+
+@keyframes canopy-breathe {
+  0%, 100% { transform: rotate(-.15deg) scale(1.005); }
+  50% { transform: rotate(.35deg) scale(1.012); }
+}
+
+.world-occlusion {
+  position: absolute;
+  z-index: 8;
+  pointer-events: none;
+  object-fit: contain;
+  object-position: center bottom;
+  filter: saturate(.86) brightness(.82) drop-shadow(0 12px 10px rgba(0,0,0,.25));
+}
+
+.world-occlusion--cutia {
+  left: 27%;
+  bottom: 8.5%;
+  width: clamp(250px, 31vw, 520px);
+  height: clamp(120px, 21vh, 230px);
+}
+
+.world-occlusion--onca {
+  right: -1%;
+  bottom: 7.5%;
+  width: clamp(410px, 49vw, 760px);
+  height: clamp(190px, 33vh, 350px);
+}
+
+.water-shimmer {
+  position: absolute;
+  z-index: 1;
+  left: 42%;
+  top: 38%;
+  width: 43%;
+  height: 24%;
+  overflow: hidden;
+  opacity: .34;
+  clip-path: polygon(22% 0, 73% 3%, 100% 52%, 79% 100%, 12% 93%, 0 38%);
+  mix-blend-mode: screen;
+  pointer-events: none;
+  filter: blur(.4px);
+  transform: perspective(450px) rotateX(57deg) rotateZ(-5deg);
+}
+
+.water-shimmer::before {
+  content: "";
+  position: absolute;
+  inset: -30% -20%;
+  background: repeating-linear-gradient(174deg, transparent 0 13px, rgba(205, 247, 210, .42) 14px 16px, transparent 17px 28px);
+  animation: river-flow 7s linear infinite;
+}
+
+.water-shimmer i {
+  position: absolute;
+  width: 28%;
+  height: 3px;
+  border-radius: 50%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,216,.82), transparent);
+  filter: blur(1px);
+  animation: water-glint 3.8s ease-in-out infinite;
+}
+
+.water-shimmer i:nth-child(1) { left: 8%; top: 21%; }
+.water-shimmer i:nth-child(2) { left: 53%; top: 42%; animation-delay: -1.1s; }
+.water-shimmer i:nth-child(3) { left: 25%; top: 68%; animation-delay: -2.4s; }
+.water-shimmer i:nth-child(4) { left: 66%; top: 83%; animation-delay: -.5s; }
+@keyframes river-flow { to { transform: translate3d(11%, 9%, 0); } }
+@keyframes water-glint { 0%, 100% { opacity: .12; transform: scaleX(.5); } 50% { opacity: .85; transform: scaleX(1.35); } }
+
+.forest-birds {
+  position: absolute;
+  z-index: 5;
+  top: 22%;
+  left: -12%;
+  width: 120%;
+  height: 100px;
+  pointer-events: none;
+}
+
+.forest-birds i {
+  position: absolute;
+  left: -40px;
+  top: 15px;
+  width: 22px;
+  height: 9px;
+  opacity: .6;
+  animation: bird-cross 18s linear infinite;
+}
+
+.forest-birds i::before,
+.forest-birds i::after {
+  content: "";
+  position: absolute;
+  top: 3px;
+  width: 13px;
+  height: 6px;
+  border-top: 3px solid rgba(21, 38, 24, .9);
+  border-radius: 70% 70% 0 0;
+  animation: bird-wing 600ms ease-in-out infinite alternate;
+}
+
+.forest-birds i::before { left: 0; transform: rotate(12deg); transform-origin: right; }
+.forest-birds i::after { right: 0; transform: rotate(-12deg); transform-origin: left; }
+.forest-birds i:nth-child(2) { top: 42px; animation-delay: -3.6s; animation-duration: 21s; transform: scale(.72); }
+.forest-birds i:nth-child(3) { top: 4px; animation-delay: -7.4s; animation-duration: 24s; transform: scale(.48); }
+@keyframes bird-cross { to { left: 108%; transform: translateY(-35px); } }
+@keyframes bird-wing { to { top: 0; } }
+
+.butterflies {
+  position: absolute;
+  z-index: 11;
+  inset: 20% 12% 27%;
+  pointer-events: none;
+}
+
+.butterflies i {
+  position: absolute;
+  left: 18%;
+  top: 55%;
+  width: 5px;
+  height: 13px;
+  border-radius: 50%;
+  background: #3b3215;
+  animation: butterfly-path 9s ease-in-out infinite;
+}
+
+.butterflies i::before,
+.butterflies i::after {
+  content: "";
+  position: absolute;
+  top: 1px;
+  width: 10px;
+  height: 12px;
+  border-radius: 75% 35% 70% 35%;
+  background: rgba(246, 198, 55, .83);
+  transform-origin: center right;
+  animation: butterfly-wing 170ms ease-in-out infinite alternate;
+}
+
+.butterflies i::before { right: 3px; }
+.butterflies i::after { left: 3px; transform: scaleX(-1); }
+.butterflies i:nth-child(2) { left: 61%; top: 34%; transform: scale(.7); animation-delay: -3.2s; }
+.butterflies i:nth-child(3) { left: 78%; top: 68%; transform: scale(.55); animation-delay: -6.5s; }
+@keyframes butterfly-wing { to { scale: .18 1; } }
+@keyframes butterfly-path { 25% { translate: 25px -32px; rotate: 8deg; } 55% { translate: 53px 4px; rotate: -5deg; } 78% { translate: 12px 28px; rotate: 5deg; } }
+
+.scene-touch {
+  position: absolute;
+  z-index: 12;
+  width: 18px;
+  height: 18px;
+  border: 2px solid rgba(255, 239, 142, .7);
+  border-radius: 50%;
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+  animation: forest-touch-ring 850ms ease-out both;
+}
+
+.scene-touch i {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 7px;
+  height: 14px;
+  border-radius: 100% 0 100% 0;
+  background: #88a84d;
+  transform-origin: 0 0;
+  animation: forest-touch-leaf 900ms ease-out both;
+}
+
+.scene-touch i:nth-child(1) { rotate: 25deg; }
+.scene-touch i:nth-child(2) { rotate: 145deg; animation-delay: 40ms; }
+.scene-touch i:nth-child(3) { rotate: 265deg; animation-delay: 80ms; }
+@keyframes forest-touch-ring { to { width: 100px; height: 100px; opacity: 0; } }
+@keyframes forest-touch-leaf { to { translate: 48px 0; rotate: 150deg; opacity: 0; } }
+
+@media (max-width: 960px) {
+  .world-occlusion--cutia { left: 22%; }
+  .world-occlusion--onca { right: -8%; }
+  .water-shimmer { left: 37%; width: 53%; }
+}
+
+@media (max-width: 680px) {
+  .world-canopy-layer { inset: -6%; width: 112%; height: 112%; }
+  .world-occlusion--cutia { left: 18%; bottom: 19%; width: 45vw; height: 18vh; }
+  .world-occlusion--onca { right: -12%; bottom: 18%; width: 60vw; height: 24vh; }
+  .water-shimmer { left: 31%; top: 37%; width: 65%; height: 20%; opacity: .24; }
+  .forest-birds { top: 24%; }
+  .butterflies { inset-inline: 4%; }
+}
+
+/* Six-character habitat: two depth rows keep every species visible in one round. */
+.forest-actors--six .forest-actor { margin: 0; }
+.forest-actors--six .forest-actor--slot-0 {
+  z-index: 4;
+  left: -1% !important;
+  right: auto !important;
+  bottom: 12% !important;
+  width: clamp(180px, 18vw, 330px);
+  height: clamp(230px, 43vh, 470px);
+}
+.forest-actors--six .forest-actor--slot-1 {
+  z-index: 6;
+  left: 25% !important;
+  right: auto !important;
+  bottom: 15% !important;
+  width: clamp(155px, 16vw, 285px);
+  height: clamp(180px, 29vh, 315px);
+}
+.forest-actors--six .forest-actor--slot-2 {
+  z-index: 7;
+  left: auto !important;
+  right: 0 !important;
+  bottom: 13% !important;
+  width: clamp(225px, 23vw, 420px);
+  height: clamp(225px, 37vh, 400px);
+}
+.forest-actors--six .forest-actor--slot-3 {
+  z-index: 2;
+  left: 11% !important;
+  right: auto !important;
+  bottom: 28% !important;
+  width: clamp(170px, 16vw, 290px);
+  height: clamp(230px, 39vh, 420px);
+  filter: saturate(.78) brightness(.8);
+}
+.forest-actors--six .forest-actor--slot-4 {
+  z-index: 6;
+  left: 47% !important;
+  right: auto !important;
+  bottom: 16% !important;
+  width: clamp(165px, 17vw, 310px);
+  height: clamp(190px, 31vh, 335px);
+}
+.forest-actors--six .forest-actor--slot-5 {
+  z-index: 3;
+  left: auto !important;
+  right: 16% !important;
+  bottom: 34% !important;
+  width: clamp(150px, 15vw, 270px);
+  height: clamp(190px, 29vh, 315px);
+  filter: saturate(.83) brightness(.84);
+}
+.forest-actors--six .forest-actor__name {
+  padding: 6px 10px;
+  font-size: 8px;
+}
+.forest-actors--six .forest-actor__tap,
+.forest-actors--six .forest-actor__order {
+  width: 35px;
+  height: 35px;
+  border-width: 2px;
+  font-size: 18px;
+}
+.forest-actors--six .forest-actor:hover:not(:disabled),
+.forest-actors--six .forest-actor--selected {
+  filter: saturate(.98) brightness(.98);
+}
+.biome-cerrado .forest-actors--six .forest-actor--slot-5,
+.biome-pampa .forest-actors--six .forest-actor--slot-5 {
+  z-index: 6;
+  left: 62% !important;
+  right: auto !important;
+  bottom: 17% !important;
+  width: clamp(160px, 15vw, 275px);
+  height: clamp(210px, 35vh, 370px);
+}
+
+@media (max-width: 960px) {
+  .forest-actors--six .forest-actor--slot-0 { width: 25vw; }
+  .forest-actors--six .forest-actor--slot-1 { left: 23% !important; width: 21vw; }
+  .forest-actors--six .forest-actor--slot-2 { right: -3% !important; width: 29vw; }
+  .forest-actors--six .forest-actor--slot-3 { left: 7% !important; width: 21vw; }
+  .forest-actors--six .forest-actor--slot-4 { left: 44% !important; width: 22vw; }
+  .forest-actors--six .forest-actor--slot-5 { right: 13% !important; width: 20vw; }
+}
+
+@media (max-width: 680px) {
+  .forest-actors--six .forest-actor--slot-0 {
+    left: -8% !important; bottom: 31% !important; width: 35vw; height: 30vh;
+  }
+  .forest-actors--six .forest-actor--slot-1 {
+    left: 19% !important; bottom: 31% !important; width: 29vw; height: 22vh;
+  }
+  .forest-actors--six .forest-actor--slot-2 {
+    left: auto !important; right: -6% !important; bottom: 30% !important; width: 39vw; height: 27vh;
+  }
+  .forest-actors--six .forest-actor--slot-3 {
+    left: -2% !important; right: auto !important; bottom: 53% !important; width: 30vw; height: 25vh;
+  }
+  .forest-actors--six .forest-actor--slot-4 {
+    left: 35% !important; right: auto !important; bottom: 50% !important; width: 31vw; height: 24vh;
+  }
+  .forest-actors--six .forest-actor--slot-5,
+  .biome-cerrado .forest-actors--six .forest-actor--slot-5,
+  .biome-pampa .forest-actors--six .forest-actor--slot-5 {
+    left: auto !important; right: 0 !important; bottom: 53% !important; width: 29vw; height: 25vh;
+  }
+  .forest-actors--six .forest-actor__name { padding: 4px 6px; font-size: 6.5px; }
+  .forest-actors--six .forest-actor__tap,
+  .forest-actors--six .forest-actor__order { width: 27px; height: 27px; font-size: 14px; }
+  .energy-path__header { margin-bottom: 6px; }
+  .chain-discoveries { gap: 3px; }
+  .chain-dot { font-size: 8px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .world-game__backdrop,
+  .forest-actors,
+  .world-canopy-layer,
+  .world-occlusion,
+  .foreground-leaves,
+  .ambient-canvas--front { translate: 0 0 !important; }
+}
+
+/* Panoramic habitat: the six species now occupy a world wider than the viewport. */
+.world-game__scroller {
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+  overscroll-behavior-x: contain;
+  scrollbar-width: none;
+  scroll-behavior: smooth;
+  touch-action: pan-x;
+  cursor: grab;
+}
+
+.world-game__scroller::-webkit-scrollbar { display: none; }
+.world-game__scroller--dragging { cursor: grabbing; scroll-behavior: auto; }
+
+.world-game__stage {
+  position: relative;
+  width: max(3000px, 170vw);
+  height: max(720px, 100svh);
+  min-height: 100%;
+  overflow: hidden;
+  isolation: isolate;
+  background: var(--deep);
+}
+
+.world-game__backdrop {
+  position: absolute;
+  z-index: -5;
+  inset: -2%;
+  width: 104%;
+  height: 104%;
+  display: block;
+  translate: var(--far-x) var(--far-y);
+  filter: saturate(.94) contrast(1.03) brightness(.91);
+  animation: panorama-camera 22s ease-in-out infinite alternate;
+  transition: translate 700ms cubic-bezier(.2,.75,.2,1);
+  pointer-events: none;
+}
+
+.world-game__backdrop > img {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 52.5%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  user-select: none;
+}
+
+.world-game__backdrop > img:first-child { left: 0; }
+
+.world-game__backdrop > img:nth-child(2) {
+  right: 0;
+  filter: none;
+  scale: -1 1;
+  -webkit-mask-image: linear-gradient(to left, transparent 0, #000 9%, #000 100%);
+  mask-image: linear-gradient(to left, transparent 0, #000 9%, #000 100%);
+}
+
+@keyframes panorama-camera {
+  from { transform: scale(1.012) translate3d(-.2%, 0, 0); }
+  to { transform: scale(1.035) translate3d(.2%, -.35%, 0); }
+}
+
+.world-game__grade {
+  width: 100%;
+  height: 100%;
+}
+
+.biome-amazonia .world-game__grade::after {
+  content: "";
+  position: absolute;
+  left: 42%;
+  bottom: -7%;
+  width: 18%;
+  height: 34%;
+  opacity: .72;
+  background: url("/scene/amazon-ground-cutia-v1.png") center bottom / cover no-repeat;
+  filter: saturate(.68) brightness(.62) contrast(.92);
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 15%, #000 85%, transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 15%, #000 85%, transparent);
+  transform: scaleX(1.35);
+  transform-origin: center bottom;
+}
+
+.scene-pan {
+  position: absolute;
+  z-index: 21;
+  inset: 0;
+  pointer-events: none;
+}
+
+.scene-pan__button {
+  position: absolute;
+  top: 51%;
+  width: 52px;
+  height: 52px;
+  border: 1px solid rgba(255,255,255,.46);
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  color: #214532;
+  background: rgba(255, 236, 132, .94);
+  box-shadow: 0 13px 32px rgba(0,0,0,.28), inset 0 1px white;
+  backdrop-filter: blur(11px);
+  transform: translateY(-50%);
+  cursor: pointer;
+  pointer-events: auto;
+  font: 800 23px/1 Georgia, serif;
+  transition: opacity 180ms ease, transform 180ms ease, filter 180ms ease;
+}
+
+.scene-pan__button:hover:not(:disabled) { filter: brightness(1.08); transform: translateY(-50%) scale(1.08); }
+.scene-pan__button:disabled { opacity: 0; pointer-events: none; }
+.scene-pan__button--left { left: clamp(14px, 2vw, 30px); }
+.scene-pan__button--right { right: clamp(14px, 2vw, 30px); animation: scene-next-pulse 2.2s ease-in-out infinite; }
+
+.scene-pan__hint {
+  position: absolute;
+  left: 50%;
+  bottom: 154px;
+  padding: 7px 12px;
+  border: 1px solid rgba(255,255,255,.24);
+  border-radius: 999px;
+  color: rgba(255,255,255,.76);
+  background: rgba(4, 39, 27, .56);
+  box-shadow: 0 7px 19px rgba(0,0,0,.16);
+  backdrop-filter: blur(8px);
+  transform: translateX(-50%);
+  font-size: 8px;
+  font-weight: 900;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+}
+
+@keyframes scene-next-pulse {
+  50% { box-shadow: 0 13px 36px rgba(0,0,0,.3), 0 0 0 9px rgba(250,213,86,.13), inset 0 1px white; }
+}
+
+/* Each full-width environment panel keeps the original painting proportions. */
+.world-canopy-layer {
+  position: absolute;
+  z-index: 5;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  pointer-events: none;
+  translate: var(--near-x) var(--near-y);
+  filter: none;
+  animation: none;
+}
+
+.world-canopy-layer > img {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 52.5%;
+  height: 100%;
+  object-fit: cover;
+  filter: saturate(.86) brightness(.74) drop-shadow(0 18px 18px rgba(0,0,0,.2));
+  transform-origin: 50% 0;
+  animation: canopy-breathe 7s ease-in-out infinite;
+}
+
+.world-canopy-layer > img:first-child { left: 0; }
+
+.world-canopy-layer > img:nth-child(2) {
+  right: 0;
+  scale: -1 1;
+  animation-delay: -3.5s;
+  -webkit-mask-image: linear-gradient(to left, transparent 0, #000 10%, #000 100%);
+  mask-image: linear-gradient(to left, transparent 0, #000 10%, #000 100%);
+}
+
+.world-occlusion--cutia {
+  z-index: 6;
+  left: -1%;
+  bottom: 0;
+  width: 54%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+.world-occlusion--onca {
+  z-index: 6;
+  right: -1%;
+  bottom: 0;
+  width: 54%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+.world-sloth-tree {
+  position: absolute;
+  z-index: 7;
+  left: 50%;
+  bottom: 0;
+  width: clamp(780px, 42vw, 1050px);
+  height: 82%;
+  opacity: .94;
+  pointer-events: none;
+  object-fit: contain;
+  object-position: left bottom;
+  filter:
+    saturate(.72)
+    brightness(.68)
+    contrast(.94)
+    drop-shadow(0 0 1px rgba(3, 38, 22, .96))
+    drop-shadow(0 20px 15px rgba(0,0,0,.25));
+  translate: var(--mid-x) var(--mid-y);
+  transition: translate 540ms cubic-bezier(.2,.75,.2,1);
+}
+
+/* World positions: producer → herbivore → producer → herbivore → predator → predator. */
+.forest-actors--six .forest-actor--slot-0 {
+  z-index: 5;
+  left: 8.5% !important;
+  right: auto !important;
+  bottom: 7% !important;
+  width: clamp(350px, 25vw, 520px);
+  height: clamp(430px, 66vh, 680px);
+  filter: saturate(.94) brightness(.92);
+}
+
+.forest-actors--six .forest-actor--slot-1 {
+  z-index: 8;
+  left: 17.5% !important;
+  right: auto !important;
+  bottom: 13% !important;
+  width: clamp(210px, 17vw, 310px);
+  height: clamp(230px, 35vh, 350px);
+}
+
+.forest-actors--six .forest-actor--slot-2 {
+  z-index: 8;
+  left: 83.5% !important;
+  right: auto !important;
+  bottom: 11% !important;
+  width: clamp(340px, 28vw, 520px);
+  height: clamp(330px, 48vh, 500px);
+}
+
+.forest-actors--six .forest-actor--slot-3 {
+  z-index: 5;
+  left: 35.5% !important;
+  right: auto !important;
+  bottom: 7% !important;
+  width: clamp(340px, 24vw, 500px);
+  height: clamp(430px, 64vh, 660px);
+  filter: saturate(.94) brightness(.92);
+}
+
+.forest-actors--six .forest-actor--slot-4 {
+  z-index: 7;
+  left: 58% !important;
+  right: auto !important;
+  bottom: 11.5% !important;
+  width: clamp(250px, 20vw, 360px);
+  height: clamp(290px, 43vh, 430px);
+}
+
+.forest-actors--six .forest-actor--slot-5,
+.biome-cerrado .forest-actors--six .forest-actor--slot-5,
+.biome-pampa .forest-actors--six .forest-actor--slot-5 {
+  z-index: 7;
+  left: 71.5% !important;
+  right: auto !important;
+  bottom: 14% !important;
+  width: clamp(260px, 21vw, 390px);
+  height: clamp(290px, 43vh, 430px);
+  filter: saturate(.92) brightness(.91);
+}
+
+.forest-actors--six .forest-actor--harpia {
+  z-index: 9;
+  bottom: 43% !important;
+  width: clamp(390px, 31vw, 560px);
+  height: clamp(260px, 38vh, 390px);
+  filter: saturate(.96) brightness(.94);
+}
+
+.forest-actor--harpia::before { display: none; }
+.forest-actor--harpia .forest-actor__art { animation: harpia-flight 4.4s ease-in-out infinite; transform-origin: 50% 55%; }
+.forest-actor--harpia .forest-actor__name { bottom: 1%; }
+.forest-actor--harpia .forest-actor__tap,
+.forest-actor--harpia .forest-actor__order { top: 20%; right: 2%; }
+
+@keyframes harpia-flight {
+  0%, 100% { transform: translate3d(-5px, 3px, 0) rotate(-1deg); }
+  45% { transform: translate3d(8px, -12px, 0) rotate(1.4deg); }
+  70% { transform: translate3d(2px, -6px, 0) rotate(.4deg); }
+}
+
+/* Every species is seated inside its biome instead of floating over it. */
+.biome-amazonia { --actor-habitat: url("/scene/habitat-amazonia-ground-v1.png"); }
+.biome-caatinga { --actor-habitat: url("/scene/habitat-caatinga-ground-v1.png"); }
+.biome-cerrado { --actor-habitat: url("/scene/habitat-cerrado-ground-v1.png"); }
+.biome-mata-atlantica { --actor-habitat: url("/scene/habitat-mata-atlantica-ground-v1.png"); }
+.biome-pampa { --actor-habitat: url("/scene/habitat-pampa-ground-v1.png"); }
+
+.forest-actor__habitat {
+  position: absolute;
+  z-index: 1;
+  left: 50%;
+  bottom: -2%;
+  width: 134%;
+  height: 47%;
+  pointer-events: none;
+  background-image: var(--actor-habitat);
+  background-repeat: no-repeat;
+  background-position: center bottom;
+  background-size: contain;
+  filter: saturate(.78) brightness(.76) contrast(.96) drop-shadow(0 13px 10px rgba(0,0,0,.24));
+  transform: translateX(-50%);
+}
+
+.forest-actor__habitat--front {
+  z-index: 3;
+  clip-path: inset(60% 0 0);
+  filter: saturate(.82) brightness(.72) contrast(.98) drop-shadow(0 8px 7px rgba(0,0,0,.18));
+}
+
+.biome-caatinga .forest-actor__habitat { filter: saturate(.72) brightness(.82) sepia(.08) drop-shadow(0 13px 10px rgba(52,24,9,.26)); }
+.biome-cerrado .forest-actor__habitat { filter: saturate(.76) brightness(.8) sepia(.05) drop-shadow(0 13px 10px rgba(42,31,8,.25)); }
+.biome-mata-atlantica .forest-actor__habitat { filter: saturate(.78) brightness(.7) hue-rotate(-3deg) drop-shadow(0 13px 10px rgba(0,24,20,.28)); }
+.biome-pampa .forest-actor__habitat { filter: saturate(.75) brightness(.83) drop-shadow(0 12px 9px rgba(18,40,20,.22)); }
+
+.forest-actor:is(
+  .forest-actor--castanheira,
+  .forest-actor--embauba,
+  .forest-actor--figueira,
+  .forest-actor--pequizeiro,
+  .forest-actor--butiazeiro,
+  .forest-actor--mandacaru,
+  .forest-actor--capim-caatinga,
+  .forest-actor--capim-cerrado,
+  .forest-actor--capim-pampa
+) .forest-actor__habitat {
+  bottom: -1%;
+  width: 112%;
+  height: 36%;
+}
+
+.forest-actor:is(
+  .forest-actor--cutia,
+  .forest-actor--prea,
+  .forest-actor--moco,
+  .forest-actor--rato-campo,
+  .forest-actor--tuco-tuco,
+  .forest-actor--gafanhoto
+) .forest-actor__habitat {
+  bottom: -4%;
+  width: 154%;
+  height: 51%;
+}
+
+.forest-actor:is(
+  .forest-actor--onca-parda,
+  .forest-actor--lobo-guara,
+  .forest-actor--graxaim,
+  .forest-actor--veado-campeiro,
+  .forest-actor--carcara,
+  .forest-actor--seriema
+) .forest-actor__habitat {
+  bottom: -3%;
+  width: 143%;
+  height: 49%;
+}
+
+.forest-actor--onca .forest-actor__habitat,
+.biome-amazonia .forest-actor--preguica .forest-actor__habitat { display: none; }
+
+.biome-mata-atlantica .forest-actor:is(.forest-actor--preguica, .forest-actor--bugio) .forest-actor__habitat {
+  bottom: 4%;
+  width: 154%;
+  height: 56%;
+  background-image: url("/scene/habitat-mata-branch-v1.png");
+  filter: saturate(.76) brightness(.68) drop-shadow(0 15px 10px rgba(0,20,16,.3));
+}
+
+.biome-mata-atlantica .forest-actor:is(.forest-actor--preguica, .forest-actor--bugio) .forest-actor__habitat--front {
+  clip-path: inset(48% 0 0);
+}
+
+.forest-actor--harpia .forest-actor__habitat {
+  bottom: -8%;
+  width: 148%;
+  height: 62%;
+  background-image: url("/scene/habitat-rainforest-canopy-v1.png");
+  filter: saturate(.74) brightness(.66) drop-shadow(0 15px 11px rgba(0,22,15,.26));
+}
+
+.forest-actor--harpia .forest-actor__habitat--front { clip-path: inset(67% 0 0); }
+
+/* The Amazon scene already supplies its own floor, occlusion and integrated set pieces.
+   Extra habitat islands read as floating shelves and make the harpy look perched. */
+.biome-amazonia .forest-actor__habitat { display: none; }
+
+/* The two Amazon trees occupy the visual clearings as large set pieces.
+   A dedicated foreground leaf layer hides their bases without creating a shelf. */
+.biome-amazonia .forest-actor:is(
+  .forest-actor--castanheira,
+  .forest-actor--embauba
+) .forest-actor__habitat--front {
+  display: block;
+  bottom: -2%;
+  width: 92%;
+  height: 21%;
+  background-image: url("/scene/amazon-tree-root-occluder-v1.png");
+  background-position: center bottom;
+  background-size: contain;
+  clip-path: none;
+  filter: saturate(.76) brightness(.7) contrast(.96) drop-shadow(0 10px 8px rgba(0, 17, 10, .26));
+}
+
+.forest-actor__art { animation-name: actor-grounded-breathe; transform-origin: 50% 100%; }
+@keyframes actor-grounded-breathe {
+  0%, 100% { transform: scale(1) rotate(-.2deg); }
+  50% { transform: scale(1.006, .996) rotate(.2deg); }
+}
+
+.forest-actor--preguica::before { bottom: 6%; width: 54%; opacity: .34; }
+.forest-actor--preguica .forest-actor__art { filter: saturate(.8) brightness(.81) drop-shadow(0 15px 9px rgba(0,0,0,.29)); }
+.forest-actor--onca .forest-actor__art,
+.forest-actor--onca.forest-actor--selected .forest-actor__art { animation: none; }
+.forest-actor--onca .forest-actor__art img { transform: translateY(8%) scale(1.04); }
+.biome-amazonia .forest-actors--six .forest-actor--slot-0 {
+  left: 6% !important;
+  bottom: 1% !important;
+  width: clamp(410px, 29vw, 610px);
+  height: clamp(520px, 76vh, 790px);
+}
+.biome-amazonia .forest-actors--six .forest-actor--slot-3 {
+  left: 41% !important;
+  bottom: 0 !important;
+  width: clamp(390px, 28vw, 590px);
+  height: clamp(500px, 74vh, 770px);
+}
+.biome-amazonia .forest-actor:is(.forest-actor--castanheira, .forest-actor--embauba) .forest-actor__name {
+  bottom: 8%;
+}
+.biome-amazonia .forest-actors--six .forest-actor--slot-2 {
+  left: 82% !important;
+  bottom: 7% !important;
+  width: clamp(390px, 29vw, 560px);
+  height: clamp(350px, 50vh, 510px);
+}
+.biome-amazonia .forest-actor--onca .forest-actor__art {
+  filter:
+    saturate(.7)
+    brightness(.7)
+    contrast(.94)
+    drop-shadow(0 0 1px rgba(3, 38, 22, .92))
+    drop-shadow(0 18px 12px rgba(0,0,0,.27));
+}
+.biome-amazonia .forest-actor--onca::before { bottom: 2%; width: 84%; height: 11%; opacity: .72; }
+.biome-amazonia .forest-actor--onca:hover:not(:disabled) { transform: scale(1.025); }
+.biome-amazonia .forest-actor--onca .forest-actor__name { left: 42%; bottom: 1%; }
+.biome-amazonia .forest-actor--onca .forest-actor__tap,
+.biome-amazonia .forest-actor--onca .forest-actor__order { top: 25%; right: 38%; }
+.biome-amazonia .forest-actor--preguica::before { display: none; }
+.biome-amazonia .forest-actor--preguica .forest-actor__art { opacity: 0; }
+.biome-amazonia .forest-actor--preguica .forest-actor__glow { display: none; }
+.biome-amazonia .forest-actors--six .forest-actor--slot-4 { bottom: 20% !important; }
+.biome-amazonia .forest-actor--preguica .forest-actor__tap,
+.biome-amazonia .forest-actor--preguica .forest-actor__order { top: 14%; right: 55%; }
+.biome-amazonia .forest-actor--preguica .forest-actor__name { left: 38%; bottom: 46%; }
+
+.forest-actors--six .forest-actor:hover:not(:disabled),
+.forest-actors--six .forest-actor--selected { filter: saturate(1) brightness(1); }
+
+.sun-rays { left: 34%; width: 42%; }
+.mist { left: -5%; width: 110%; }
+.water-shimmer { left: 19%; width: 64%; }
+.butterflies { inset-inline: 8%; }
+.forest-birds { left: -4%; width: 108%; }
+
+@media (max-width: 960px) {
+  .world-game__stage { width: max(2500px, 240vw); }
+  .scene-pan__hint { bottom: 155px; }
+}
+
+@media (max-width: 680px) {
+  .world-game__stage { width: max(1900px, 500vw); height: max(770px, 100svh); }
+  .world-game__backdrop { inset: -2%; width: 104%; height: 104%; }
+  .scene-pan__button { top: 48%; width: 44px; height: 44px; font-size: 20px; }
+  .scene-pan__button--left { left: 8px; }
+  .scene-pan__button--right { right: 8px; }
+  .scene-pan__hint { bottom: 190px; font-size: 7px; }
+  .forest-actors--six .forest-actor--slot-0 { left: 4% !important; bottom: 23% !important; width: 48vw; height: 43vh; }
+  .forest-actors--six .forest-actor--slot-1 { left: 18% !important; bottom: 24% !important; width: 35vw; height: 26vh; }
+  .forest-actors--six .forest-actor--slot-2 { left: 84% !important; right: auto !important; bottom: 23% !important; width: 52vw; height: 34vh; }
+  .forest-actors--six .forest-actor--slot-3 { left: 36% !important; bottom: 21% !important; width: 46vw; height: 42vh; }
+  .forest-actors--six .forest-actor--slot-4 { left: 58% !important; bottom: 23% !important; width: 40vw; height: 31vh; }
+  .forest-actors--six .forest-actor--slot-5,
+  .biome-cerrado .forest-actors--six .forest-actor--slot-5,
+  .biome-pampa .forest-actors--six .forest-actor--slot-5 { left: 72% !important; right: auto !important; bottom: 23% !important; width: 43vw; height: 33vh; }
+  .forest-actors--six .forest-actor--harpia { bottom: 53% !important; width: 62vw; height: 27vh; }
+  .biome-amazonia .forest-actors--six .forest-actor--slot-0 {
+    left: 3% !important;
+    bottom: 12% !important;
+    width: 64vw;
+    height: 57vh;
+  }
+  .biome-amazonia .forest-actors--six .forest-actor--slot-3 {
+    left: 39% !important;
+    bottom: 10% !important;
+    width: 60vw;
+    height: 55vh;
+  }
+  .biome-amazonia .forest-actor:is(.forest-actor--castanheira, .forest-actor--embauba) .forest-actor__name {
+    bottom: 9%;
+  }
+  .biome-amazonia .forest-actors--six .forest-actor--slot-2 { left: 82% !important; bottom: 20% !important; width: 62vw; height: 39vh; }
+  .biome-amazonia .forest-actor--onca .forest-actor__art img { transform: translateY(6%) scale(1.02); }
+  .biome-amazonia .forest-actor--onca .forest-actor__tap,
+  .biome-amazonia .forest-actor--onca .forest-actor__order { top: 24%; right: 22%; }
+  .world-sloth-tree { left: 48%; bottom: 9%; width: 128vw; height: 72%; }
+  .biome-amazonia .forest-actors--six .forest-actor--slot-4 { bottom: 23% !important; }
+  .biome-amazonia .forest-actor--preguica .forest-actor__tap,
+  .biome-amazonia .forest-actor--preguica .forest-actor__order { top: 27%; right: 4%; }
+  .biome-amazonia .forest-actor--preguica .forest-actor__name { left: 50%; bottom: 25%; }
+  .forest-actor__habitat { width: 145%; height: 50%; }
+  .forest-actor:is(
+    .forest-actor--castanheira,
+    .forest-actor--embauba,
+    .forest-actor--figueira,
+    .forest-actor--pequizeiro,
+    .forest-actor--butiazeiro,
+    .forest-actor--mandacaru,
+    .forest-actor--capim-caatinga,
+    .forest-actor--capim-cerrado,
+    .forest-actor--capim-pampa
+  ) .forest-actor__habitat { width: 120%; height: 39%; }
+  .biome-mata-atlantica .forest-actor:is(.forest-actor--preguica, .forest-actor--bugio) .forest-actor__habitat {
+    bottom: 2%;
+    width: 174%;
+    height: 62%;
+  }
+  .forest-actor--harpia .forest-actor__habitat { width: 160%; height: 66%; }
+  .world-occlusion--cutia,
+  .world-occlusion--onca { bottom: 10%; height: 84%; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .world-game__backdrop { animation: none; }
+  .scene-pan__button--right { animation: none; }
+  .forest-actor--harpia .forest-actor__art { animation: none; }
+}

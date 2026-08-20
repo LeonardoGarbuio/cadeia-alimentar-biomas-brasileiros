@@ -1585,6 +1585,53 @@ button:focus-visible, a:focus-visible { outline: 4px solid #ffe26d; outline-offs
 }
 
 /* Each full-width environment panel keeps the original painting proportions. */
+.world-producers {
+  position: absolute;
+  z-index: 4;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  translate: var(--far-x) var(--far-y);
+  transition: translate 700ms cubic-bezier(.2,.75,.2,1);
+}
+
+.world-producer {
+  position: absolute;
+  bottom: 0;
+  object-fit: contain;
+  object-position: center bottom;
+  opacity: .89;
+  transform-origin: 50% 100%;
+  filter:
+    saturate(.68)
+    brightness(.64)
+    contrast(.92)
+    drop-shadow(0 0 1px rgba(4, 39, 23, .88))
+    drop-shadow(0 18px 13px rgba(0, 18, 10, .22));
+  animation: distant-tree-breathe 7.6s ease-in-out infinite;
+}
+
+.world-producer--castanheira {
+  left: 6.5%;
+  bottom: 1%;
+  width: clamp(720px, 41vw, 920px);
+  height: 91%;
+}
+
+.world-producer--embauba {
+  left: 35.5%;
+  bottom: 3%;
+  width: clamp(580px, 34vw, 760px);
+  height: 81%;
+  opacity: .84;
+  animation-delay: -3.8s;
+}
+
+@keyframes distant-tree-breathe {
+  0%, 100% { transform: scale(1) rotate(-.18deg); }
+  50% { transform: scale(1.004, .998) rotate(.28deg); }
+}
+
 .world-canopy-layer {
   position: absolute;
   z-index: 5;
@@ -1846,21 +1893,40 @@ button:focus-visible, a:focus-visible { outline: 4px solid #ffe26d; outline-offs
    Extra habitat islands read as floating shelves and make the harpy look perched. */
 .biome-amazonia .forest-actor__habitat { display: none; }
 
-/* The two Amazon trees occupy the visual clearings as large set pieces.
-   A dedicated foreground leaf layer hides their bases without creating a shelf. */
+/* The producers are rendered once inside the deep scenery layer above.
+   Their buttons stay here for interaction, without duplicating the artwork. */
+.biome-amazonia .forest-actor:is(
+  .forest-actor--castanheira,
+  .forest-actor--embauba
+) .forest-actor__art {
+  opacity: 0;
+}
+
+.biome-amazonia .forest-actor:is(
+  .forest-actor--castanheira,
+  .forest-actor--embauba
+) .forest-actor__glow {
+  display: none;
+}
+
+.biome-amazonia .forest-actor:is(
+  .forest-actor--castanheira,
+  .forest-actor--embauba
+) .forest-actor__tap,
+.biome-amazonia .forest-actor:is(
+  .forest-actor--castanheira,
+  .forest-actor--embauba
+) .forest-actor__order {
+  top: 16%;
+  right: 18%;
+}
+
+/* The foreground scene now hides the distant trunks, so no separate root shelf is needed. */
 .biome-amazonia .forest-actor:is(
   .forest-actor--castanheira,
   .forest-actor--embauba
 ) .forest-actor__habitat--front {
-  display: block;
-  bottom: -2%;
-  width: 92%;
-  height: 21%;
-  background-image: url("/scene/amazon-tree-root-occluder-v1.png");
-  background-position: center bottom;
-  background-size: contain;
-  clip-path: none;
-  filter: saturate(.76) brightness(.7) contrast(.96) drop-shadow(0 10px 8px rgba(0, 17, 10, .26));
+  display: none;
 }
 
 .forest-actor__art { animation-name: actor-grounded-breathe; transform-origin: 50% 100%; }
@@ -1881,7 +1947,7 @@ button:focus-visible, a:focus-visible { outline: 4px solid #ffe26d; outline-offs
   height: clamp(520px, 76vh, 790px);
 }
 .biome-amazonia .forest-actors--six .forest-actor--slot-3 {
-  left: 41% !important;
+  left: 37% !important;
   bottom: 0 !important;
   width: clamp(390px, 28vw, 590px);
   height: clamp(500px, 74vh, 770px);
@@ -1994,6 +2060,416 @@ button:focus-visible, a:focus-visible { outline: 4px solid #ffe26d; outline-offs
 
 @media (prefers-reduced-motion: reduce) {
   .world-game__backdrop { animation: none; }
+  .world-producer { animation: none; }
   .scene-pan__button--right { animation: none; }
   .forest-actor--harpia .forest-actor__art { animation: none; }
+}
+
+/* Amazon responsive art direction.
+   The panorama stays wide enough to explore, while every creature scales from
+   the viewport height and remains clear of the fixed lesson interface. */
+@media (min-width: 1600px) and (min-height: 900px) {
+  .biome-amazonia .world-game__stage { width: max(3400px, 165vw); }
+
+  .biome-amazonia .world-producer--castanheira {
+    left: 6%;
+    width: clamp(840px, 43vw, 1040px);
+    height: 92%;
+  }
+
+  .biome-amazonia .world-producer--embauba {
+    left: 35%;
+    width: clamp(710px, 36vw, 870px);
+    height: 84%;
+  }
+
+  .biome-amazonia .forest-actors--six .forest-actor--slot-0 {
+    width: clamp(560px, 31vw, 730px);
+    height: clamp(680px, 76svh, 880px);
+  }
+
+  .biome-amazonia .forest-actors--six .forest-actor--slot-1 {
+    width: clamp(280px, 16vw, 350px);
+    height: clamp(300px, 34svh, 390px);
+  }
+
+  .biome-amazonia .forest-actors--six .forest-actor--slot-2 {
+    width: clamp(520px, 29vw, 640px);
+    height: clamp(440px, 49svh, 560px);
+  }
+
+  .biome-amazonia .forest-actors--six .forest-actor--slot-3 {
+    left: 37% !important;
+    width: clamp(540px, 30vw, 710px);
+    height: clamp(660px, 74svh, 850px);
+  }
+
+  .biome-amazonia .forest-actors--six .forest-actor--harpia {
+    width: clamp(500px, 30vw, 620px);
+    height: clamp(320px, 36svh, 430px);
+  }
+
+  .biome-amazonia .world-sloth-tree {
+    width: clamp(980px, 45vw, 1200px);
+    height: 84%;
+  }
+}
+
+@media (min-width: 961px) and (max-height: 820px) {
+  .biome-amazonia.world-game { min-height: max(620px, 100svh); }
+  .biome-amazonia .world-game__stage { height: max(620px, 100svh); }
+  .biome-amazonia .game-hud { height: 76px; padding-block: 10px; }
+  .biome-amazonia .forest-guide { top: 86px; min-height: 66px; padding-block: 10px; }
+  .biome-amazonia .energy-path { bottom: 18px; min-height: 100px; padding-block: 12px 10px; }
+  .biome-amazonia .game-actions { bottom: 31px; }
+  .biome-amazonia .scene-pan__hint { bottom: 132px; }
+
+  .biome-amazonia .world-producer--castanheira {
+    left: 6%;
+    width: clamp(640px, 40vw, 800px);
+    height: 91%;
+  }
+
+  .biome-amazonia .world-producer--embauba {
+    left: 35%;
+    width: clamp(520px, 32vw, 650px);
+    height: 83%;
+  }
+
+  .biome-amazonia .forest-actors--six .forest-actor--slot-0 {
+    left: 6.5% !important;
+    width: clamp(370px, 28vw, 520px);
+    height: clamp(430px, 69svh, 570px);
+  }
+
+  .biome-amazonia .forest-actors--six .forest-actor--slot-1 {
+    left: 19% !important;
+    bottom: 15% !important;
+    width: clamp(190px, 16vw, 270px);
+    height: clamp(205px, 32svh, 290px);
+  }
+
+  .biome-amazonia .forest-actors--six .forest-actor--slot-2 {
+    left: 82.5% !important;
+    bottom: 10% !important;
+    width: clamp(350px, 28vw, 500px);
+    height: clamp(300px, 45svh, 410px);
+  }
+
+  .biome-amazonia .forest-actors--six .forest-actor--slot-3 {
+    left: 37% !important;
+    width: clamp(360px, 27vw, 500px);
+    height: clamp(420px, 67svh, 555px);
+  }
+
+  .biome-amazonia .forest-actors--six .forest-actor--harpia {
+    left: 71% !important;
+    bottom: 42% !important;
+    width: clamp(350px, 29vw, 500px);
+    height: clamp(225px, 34svh, 310px);
+  }
+
+  .biome-amazonia .world-sloth-tree { bottom: 1%; height: 79%; }
+}
+
+@media (max-width: 1100px) and (min-width: 681px) and (min-height: 521px) {
+  .biome-amazonia.world-game { min-height: max(700px, 100svh); }
+  .biome-amazonia .world-game__stage {
+    width: max(2500px, 260vw);
+    height: max(700px, 100svh);
+  }
+
+  .biome-amazonia .world-producer--castanheira {
+    left: 5.5%;
+    width: clamp(610px, 81vw, 730px);
+    height: 89%;
+  }
+
+  .biome-amazonia .world-producer--embauba {
+    left: 35%;
+    width: clamp(520px, 67vw, 630px);
+    height: 79%;
+  }
+
+  .biome-amazonia .forest-actors--six .forest-actor--slot-0 {
+    left: 4.5% !important;
+    bottom: 7% !important;
+    width: clamp(390px, 54vw, 530px);
+    height: clamp(500px, 68svh, 660px);
+  }
+
+  .biome-amazonia .forest-actors--six .forest-actor--slot-1 {
+    left: 19% !important;
+    bottom: 20% !important;
+    width: clamp(210px, 31vw, 300px);
+    height: clamp(220px, 31svh, 300px);
+  }
+
+  .biome-amazonia .forest-actors--six .forest-actor--slot-2 {
+    left: 82.5% !important;
+    bottom: 18% !important;
+    width: clamp(360px, 48vw, 500px);
+    height: clamp(300px, 42svh, 430px);
+  }
+
+  .biome-amazonia .forest-actors--six .forest-actor--slot-3 {
+    left: 36.5% !important;
+    bottom: 6% !important;
+    width: clamp(370px, 51vw, 510px);
+    height: clamp(480px, 66svh, 640px);
+  }
+
+  .biome-amazonia .forest-actors--six .forest-actor--slot-4 {
+    left: 58% !important;
+    bottom: 21% !important;
+    width: clamp(250px, 34vw, 330px);
+    height: clamp(280px, 38svh, 380px);
+  }
+
+  .biome-amazonia .forest-actors--six .forest-actor--harpia {
+    left: 70.5% !important;
+    bottom: 49% !important;
+    width: clamp(340px, 46vw, 480px);
+    height: clamp(220px, 31svh, 310px);
+  }
+
+  .biome-amazonia .world-sloth-tree {
+    left: 49%;
+    bottom: 4%;
+    width: clamp(660px, 88vw, 880px);
+    height: 78%;
+  }
+
+  .biome-amazonia .forest-actor__tap,
+  .biome-amazonia .forest-actor__order {
+    width: 42px;
+    height: 42px;
+  }
+}
+
+@media (max-width: 960px) and (min-width: 681px) and (min-height: 521px) {
+  .biome-amazonia .forest-guide { width: min(520px, calc(100% - 150px)); }
+  .biome-amazonia .energy-path {
+    left: 18px;
+    right: 18px;
+    bottom: 78px;
+    width: auto;
+    min-height: 102px;
+    transform: none;
+  }
+  .biome-amazonia .game-actions { left: 18px; right: 18px; bottom: 16px; justify-content: flex-end; }
+  .biome-amazonia .scene-pan__hint { bottom: 198px; }
+}
+
+@media (max-width: 680px) {
+  .biome-amazonia.world-game { min-height: max(640px, 100svh); }
+  .biome-amazonia .world-game__stage {
+    width: clamp(2150px, 350vw, 2450px);
+    height: max(640px, 100svh);
+  }
+
+  .biome-amazonia .world-producer--castanheira {
+    left: 5.5%;
+    bottom: 1%;
+    width: clamp(520px, 134vw, 640px);
+    height: 88%;
+  }
+
+  .biome-amazonia .world-producer--embauba {
+    left: 35%;
+    bottom: 3%;
+    width: clamp(460px, 119vw, 570px);
+    height: 78%;
+  }
+
+  .biome-amazonia .forest-actors--six .forest-actor--slot-0 {
+    left: 3.5% !important;
+    bottom: 15% !important;
+    width: clamp(330px, 92vw, 430px);
+    height: clamp(430px, 61svh, 580px);
+  }
+
+  .biome-amazonia .forest-actors--six .forest-actor--slot-1 {
+    left: 19.5% !important;
+    bottom: 22% !important;
+    width: clamp(190px, 54vw, 250px);
+    height: clamp(190px, 30svh, 260px);
+  }
+
+  .biome-amazonia .forest-actors--six .forest-actor--slot-2 {
+    left: 82.5% !important;
+    bottom: 20% !important;
+    width: clamp(330px, 92vw, 440px);
+    height: clamp(280px, 39svh, 360px);
+  }
+
+  .biome-amazonia .forest-actors--six .forest-actor--slot-3 {
+    left: 36% !important;
+    bottom: 14% !important;
+    width: clamp(320px, 88vw, 420px);
+    height: clamp(420px, 59svh, 560px);
+  }
+
+  .biome-amazonia .forest-actors--six .forest-actor--slot-4 {
+    left: 58% !important;
+    bottom: 25% !important;
+    width: clamp(210px, 58vw, 280px);
+    height: clamp(250px, 36svh, 340px);
+  }
+
+  .biome-amazonia .forest-actors--six .forest-actor--harpia {
+    left: 70.5% !important;
+    bottom: 52% !important;
+    width: clamp(300px, 84vw, 400px);
+    height: clamp(200px, 27svh, 280px);
+  }
+
+  .biome-amazonia .world-sloth-tree {
+    left: 49%;
+    bottom: 9%;
+    width: clamp(540px, 138vw, 680px);
+    height: 74%;
+  }
+
+  .biome-amazonia .forest-actor:is(.forest-actor--castanheira, .forest-actor--embauba) .forest-actor__name {
+    bottom: 20%;
+  }
+
+  .biome-amazonia .forest-actor:is(.forest-actor--castanheira, .forest-actor--embauba) .forest-actor__tap,
+  .biome-amazonia .forest-actor:is(.forest-actor--castanheira, .forest-actor--embauba) .forest-actor__order {
+    top: 18%;
+    right: 16%;
+  }
+
+  .biome-amazonia .forest-actor--preguica .forest-actor__tap,
+  .biome-amazonia .forest-actor--preguica .forest-actor__order { top: 29%; right: 5%; }
+  .biome-amazonia .forest-actor--preguica .forest-actor__name { left: 50%; bottom: 24%; }
+  .biome-amazonia .forest-actor--onca .forest-actor__tap,
+  .biome-amazonia .forest-actor--onca .forest-actor__order { top: 23%; right: 18%; }
+
+  .biome-amazonia .forest-actor__tap,
+  .biome-amazonia .forest-actor__order {
+    width: 44px;
+    height: 44px;
+    font-size: 20px;
+  }
+
+  .biome-amazonia .scene-pan__button { top: 45%; }
+  .biome-amazonia .scene-pan__hint { bottom: 190px; }
+}
+
+@media (max-width: 430px) {
+  .biome-amazonia .game-hud { gap: 5px; padding-inline: 9px; }
+  .biome-amazonia .game-back { padding-inline: 10px; }
+  .biome-amazonia .biome-plaque { padding-inline: 9px; }
+  .biome-amazonia .biome-plaque small { font-size: 6.5px; letter-spacing: .08em; white-space: nowrap; }
+  .biome-amazonia .biome-plaque strong { font-size: 18px; }
+  .biome-amazonia .mission-progress { padding-inline: 6px; }
+  .biome-amazonia .forest-guide {
+    top: 86px;
+    width: calc(100% - 18px);
+    min-height: 72px;
+    padding: 11px 11px 11px 66px;
+  }
+  .biome-amazonia .forest-guide__mascot { left: 10px; top: 10px; width: 46px; height: 46px; }
+  .biome-amazonia .forest-guide strong { font-size: 13px; }
+  .biome-amazonia .energy-path { left: 8px; right: 8px; padding-inline: 9px; }
+  .biome-amazonia .energy-path__slots { gap: 17px; }
+  .biome-amazonia .seed-slot > small { font-size: 6px; letter-spacing: .08em; }
+}
+
+@media (orientation: landscape) and (max-height: 520px) {
+  .biome-amazonia.world-game { min-height: 100svh; height: 100svh; }
+  .biome-amazonia .world-game__stage {
+    width: max(2200px, 280vw);
+    height: 100svh;
+    min-height: 0;
+  }
+  .biome-amazonia .world-producer--castanheira {
+    left: 6%;
+    width: clamp(460px, 66vw, 600px);
+    height: 94%;
+  }
+  .biome-amazonia .world-producer--embauba {
+    left: 35%;
+    width: clamp(400px, 57vw, 520px);
+    height: 86%;
+  }
+  .biome-amazonia .game-hud { height: 58px; padding: 7px 10px; }
+  .biome-amazonia .game-back { min-height: 36px; }
+  .biome-amazonia .biome-plaque { padding: 4px 14px 6px; }
+  .biome-amazonia .biome-plaque small { font-size: 6px; }
+  .biome-amazonia .biome-plaque strong { font-size: 18px; }
+  .biome-amazonia .mission-progress { padding-block: 4px; }
+  .biome-amazonia .forest-guide {
+    top: 64px;
+    width: min(460px, calc(100% - 150px));
+    min-height: 56px;
+    padding: 8px 12px 8px 56px;
+  }
+  .biome-amazonia .forest-guide__mascot { left: 9px; top: 8px; width: 40px; height: 40px; }
+  .biome-amazonia .forest-guide strong { font-size: 12px; }
+  .biome-amazonia .forest-guide small { margin-bottom: 2px; font-size: 6px; }
+
+  .biome-amazonia .energy-path {
+    left: 8px;
+    right: auto;
+    bottom: 8px;
+    width: calc(100% - 230px);
+    max-width: 600px;
+    min-height: 72px;
+    padding: 7px 10px;
+    border-radius: 17px 17px 7px 7px;
+    transform: none;
+  }
+  .biome-amazonia .energy-path__header { min-height: 11px; margin-bottom: 3px; }
+  .biome-amazonia .energy-path__slots { gap: 18px; }
+  .biome-amazonia .seed-slot { height: 43px; }
+  .biome-amazonia .seed-slot button > span { flex-basis: 37px; height: 37px; }
+  .biome-amazonia .game-actions { left: auto; right: 8px; bottom: 10px; }
+  .biome-amazonia .game-actions .wood-button { max-width: 165px; min-height: 46px; }
+  .biome-amazonia .scene-pan__hint { bottom: 91px; }
+  .biome-amazonia .scene-pan__button { top: 48%; width: 42px; height: 42px; }
+
+  .biome-amazonia .forest-actors--six .forest-actor--slot-0 {
+    bottom: 10% !important;
+    width: clamp(330px, 48vw, 430px);
+    height: clamp(280px, 74svh, 370px);
+  }
+  .biome-amazonia .forest-actors--six .forest-actor--slot-1 {
+    bottom: 19% !important;
+    width: clamp(180px, 27vw, 230px);
+    height: clamp(170px, 48svh, 225px);
+  }
+  .biome-amazonia .forest-actors--six .forest-actor--slot-2 {
+    bottom: 17% !important;
+    width: clamp(290px, 43vw, 380px);
+    height: clamp(215px, 59svh, 290px);
+  }
+  .biome-amazonia .forest-actors--six .forest-actor--slot-3 {
+    bottom: 9% !important;
+    width: clamp(310px, 46vw, 410px);
+    height: clamp(270px, 72svh, 360px);
+  }
+  .biome-amazonia .forest-actors--six .forest-actor--slot-4 {
+    bottom: 19% !important;
+    width: clamp(200px, 30vw, 260px);
+    height: clamp(205px, 54svh, 270px);
+  }
+  .biome-amazonia .forest-actors--six .forest-actor--harpia {
+    bottom: 43% !important;
+    width: clamp(280px, 42vw, 360px);
+    height: clamp(155px, 43svh, 210px);
+  }
+  .biome-amazonia .world-sloth-tree {
+    bottom: 3%;
+    width: clamp(470px, 70vw, 600px);
+    height: 90%;
+  }
+  .biome-amazonia .forest-actor:is(.forest-actor--castanheira, .forest-actor--embauba) .forest-actor__tap,
+  .biome-amazonia .forest-actor:is(.forest-actor--castanheira, .forest-actor--embauba) .forest-actor__order { top: 34%; right: 13%; }
+  .biome-amazonia .forest-actor--preguica .forest-actor__tap,
+  .biome-amazonia .forest-actor--preguica .forest-actor__order { top: 40%; right: 5%; }
+  .biome-amazonia .forest-actor--harpia .forest-actor__tap,
+  .biome-amazonia .forest-actor--harpia .forest-actor__order { top: 42%; }
 }

@@ -89,6 +89,20 @@ function SceneDecor({ biomeId }: { biomeId: string }) {
       <div className="butterflies" aria-hidden="true"><i /><i /><i /></div>
       {isAmazon && (
         <>
+          <div className="world-producers" aria-hidden="true">
+            <img
+              className="world-producer world-producer--castanheira"
+              src="/species/game-castanheira-v2.png"
+              alt=""
+              draggable={false}
+            />
+            <img
+              className="world-producer world-producer--embauba"
+              src="/species/catalog-embauba-v1.png"
+              alt=""
+              draggable={false}
+            />
+          </div>
           <div className="world-canopy-layer" aria-hidden="true">
             <img src="/scene/amazon-canopy-foreground-v1.png" alt="" draggable={false} />
             <img src="/scene/amazon-canopy-foreground-v1.png" alt="" draggable={false} />
